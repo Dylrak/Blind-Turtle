@@ -1,0 +1,31 @@
+#!/bin/bash
+
+read -p "When was the meeting held? " -e input
+
+mkdir bt-not-$input-mh
+echo "bt-not-$input-mh:
+	pdflatex bt-not-$input-mh.tex
+	pdflatex bt-not-$input-mh.tex
+	rm *.aux *.log *.toc" > bt-not-$input-mh/Makefile
+echo '\documentclass[a4paper, 10pt]{article}
+
+\usepackage[dutch]{babel}
+\usepackage{url}
+
+\begin{document}
+
+\frenchspacing
+
+\title{Notulen \today\\bt-not-'$input'-mh}
+\author{Menno Hellinga}
+\date{\empty}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Aanwezigen}
+
+\end{document}' > bt-not-$input-mh/bt-not-$input-mh.tex
