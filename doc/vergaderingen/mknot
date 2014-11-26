@@ -21,11 +21,36 @@ echo '\documentclass[a4paper, 10pt]{article}
 \date{\empty}
 
 \maketitle
-\newpage
-
 \tableofcontents
 \newpage
 
 \section{Aanwezigen}
+
+\section{Hoe ver zijn we?}
+
+\subsection{Menno}
+\begin{itemize}
+	\item
+\end{itemize}
+
+\subsection{Nander}
+\begin{itemize}
+	\item
+\end{itemize}
+
+\subsection{Dylan}
+\begin{itemize}
+	\item
+\end{itemize}
+
+\subsection{Jan Chr.}
+\begin{itemize}
+	\item
+\end{itemize}
+
+\subsection{Rik}
+\begin{itemize}
+	\item
+\end{itemize}
 
 \end{document}' > bt-not-$input-mh/bt-not-$input-mh.tex
