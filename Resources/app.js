@@ -1,6 +1,10 @@
 /////////////////////////////////SETTINGS///////////////////////////
-	//Create window
-	var settings = Ti.UI.createWindow({
+
+	//Create a TabGroup to hold the windows
+	var MainTabGroup = Titanium.UI.createTabGroup();
+	
+	//Create the settings window
+	var instellingenWindow = Ti.UI.createWindow({
 		title:"Instellingen",
 		backgroundColor:"#fff"
 	});
@@ -84,15 +88,71 @@
 	}
 	
 	//Add Views to Window
-	settings.add(textField);
-	settings.add(viewMenu);
-	settings.add(viewContainer);
+	instellingenWindow.add(textField);
+	instellingenWindow.add(viewMenu);
+	instellingenWindow.add(viewContainer);
+	
+	//Create a tab to hold the settings window
+	var instellingenTab = Titanium.UI.createTab({
+		title: "Instellingen",
+		window: instellingenWindow
+	});
+	
+	//Add the settings window to the Main Tabgroup
+	MainTabGroup.addTab (instellingenTab);
+	
+	if (Ti.App.Properties.getString("School") == "Stedelijk Gymnasium"){
+		//Create the gevleugelde woorden window
+		var gevleugeldeWoordenWindow = Titanium.UI.createWindow ({
+			title:"Stentor"
+		});
+	
+		//Create a mailto button
+		var mailtoButton = Titanium.UI.createButton ({
+			title:"Gevleugelde Woorden insturen",
+			top:10,
+			width:200,
+			height:10
+		});
+		mailtoButton.addEventListener('click', function(e){
+			var emailDialog = Titanium.UI.createEmailDialog();
+	    	emailDialog.setSubject('Gevleugelde woorden; via Blind Turtle');
+	    	// let's not spam the Stentor during our test phase
+		    emailDialog.setToRecipients(['mennohellinga@zoho.com']);
+		    
+		    //REMOVE AFTER RELEASE:
+		    emailDialog.addEventListener('complete',function(e)
+		    {
+		        if (e.result == emailDialog.SENT)
+		        {
+		            if (Ti.Platform.osname != 'android') {
+		                alert("Gevleugelde woorden ingestuurd!");
+		            }
+		        }
+		        else
+		        {
+		            alert("kon geen bericht sturen: result = " + e.result);
+		        }
+   	 		});
+
+    		emailDialog.open();
+		});
+		
+		gevleugeldeWoordenWindow.add(mailtoButton);
+		
+		var gevleugeldeWoordenTab = Titanium.UI.createTab({
+			title:'Stentor',
+			window:gevleugeldeWoordenWindow
+		});
+		
+		MainTabGroup.addTab(gevleugeldeWoordenTab);
+	}
 
 /////////////////////////////////SETTINGS///////////////////////////
 
 //Check if this is the first time this app is run.
 if (Ti.App.Properties.getString("School") == null || Ti.App.Properties.getString("Class") == null) {
-	settings.open();
+	MainTabGroup.open();
 } else {
-	settings.open();
+	MainTabGroup.open();
 }

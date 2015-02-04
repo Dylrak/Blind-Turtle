@@ -3,7 +3,7 @@
     <id>com.blind.turtle</id>
     <name>Blind-Turtle</name>
     <version>1.0</version>
-    <publisher>Dylan</publisher>
+    <publisher>Blind Turtle Developers</publisher>
     <url>http://</url>
     <description/>
     <copyright>2014 by Dylan</copyright>
@@ -55,5 +55,5 @@
         <target device="blackberry">false</target>
         <target device="mobileweb">true</target>
     </deployment-targets>
-    <sdk-version>3.4.1.GA</sdk-version>
+    <sdk-version>3.5.0.GA</sdk-version>
 </ti:app>
