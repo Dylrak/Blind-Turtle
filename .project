@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Blind-Turtle</name>
+	<name>PJ Info (Alloy)</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -17,6 +17,8 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>com.appcelerator.titanium.alloy.core.nature</nature>
 		<nature>com.appcelerator.titanium.mobile.nature</nature>
+		<nature>com.aptana.projects.webnature</nature>
 	</natures>
 </projectDescription>
