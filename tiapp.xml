@@ -3,10 +3,10 @@
     <id>com.pjinfoalloy</id>
     <name>PJ Info (Alloy)</name>
     <version>1.0</version>
-    <publisher>Jan Christiaan Zwier</publisher>
+    <publisher>Blind Turtle</publisher>
     <url>http://</url>
     <description/>
-    <copyright>2015 by Jan Christiaan Zwier</copyright>
+    <copyright>2015 by Blind Turtle</copyright>
     <icon>appicon.png</icon>
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
