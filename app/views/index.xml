@@ -1,0 +1,14 @@
+<Alloy>
+	<TabGroup>
+		<Tab title="Mededelingen">
+			<Window>
+        		<WebView url="http://www3.pj.nl/infoschermgymnasium/" />
+        	</Window>
+    	</Tab>
+    	<Tab title="Roosterwijzigingen">
+    		<Window>
+        		<WebView url="http://www3.pj.nl/gym_info_leerlingen/" />
+        	</Window>
+    	</Tab>
+	</TabGroup>
+</Alloy>
