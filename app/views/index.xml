@@ -11,9 +11,11 @@
         	</Window>
     	</Tab>
     	<Tab title="Stentor">
-    		<Button id="gevleugeldeWoorden" systemButton="ACTION"
-    			title="Gevleugelde woorden insturen"
-    			top="10" width="100" height="50" />
+    		<Window>
+    			<Button id="gevleugeldeWoorden" systemButton="ACTION"
+    				title="Gevleugelde woorden insturen"
+    				top="10" width="100" height="50" />
+    		</Window>
     	</Tab>
 	</TabGroup>
 </Alloy>
