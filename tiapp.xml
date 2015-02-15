@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
-    <id>com.pjinfoalloy</id>
-    <name>PJ Info (Alloy)</name>
+    <id>com.pjinfoclassic</id>
+    <name>PJ Info (Classic)</name>
     <version>1.0</version>
     <publisher>Blind Turtle</publisher>
     <url>http://</url>
@@ -11,7 +11,7 @@
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
     <analytics>true</analytics>
-    <guid>e6a9ac7a-0a5a-4c9c-8737-f1783cdeddca</guid>
+    <guid>cf5c22c2-b799-472a-bdaf-4c13183ec934</guid>
     <property name="ti.ui.defaultunit" type="string">dp</property>
     <ios>
         <plist>
@@ -56,7 +56,4 @@
         <target device="mobileweb">true</target>
     </deployment-targets>
     <sdk-version>3.5.0.GA</sdk-version>
-    <plugins>
-        <plugin version="1.0">ti.alloy</plugin>
-    </plugins>
 </ti:app>

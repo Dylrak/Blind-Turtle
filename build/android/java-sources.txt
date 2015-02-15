@@ -1,0 +1,8 @@
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/android/support/v7/appcompat/R.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/com/pjinfoclassic/ApplicationStylesheet.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/com/pjinfoclassic/AssetCryptImpl.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/com/pjinfoclassic/PjInfoClassicActivity.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/com/pjinfoclassic/PjInfoClassicAppInfo.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/com/pjinfoclassic/PjInfoClassicApplication.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/com/pjinfoclassic/R.java"
+"C:/Users/JanChristiaan/Documents/Titanium_Studio_Workspace/PJ Info (Classic)/build/android/gen/ti/modules/titanium/ui/R.java"
