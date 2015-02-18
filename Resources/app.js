@@ -37,7 +37,9 @@ var webview2 = Titanium.UI.createWebView({
 win2.add(webview2);
 
 var win3 = Titanium.UI.createWindow({  
-    title:'Stentor'
+    title:'Stentor',
+    backgroundColor: '#fff',
+    color: '#000'
 });
 
 var tab3 = Titanium.UI.createTab({
@@ -49,7 +51,9 @@ var tab3 = Titanium.UI.createTab({
 var button = Ti.UI.createButton({
 	title:'Gevleugeld Woord insturen',
 	height:70,
-	width:170
+	width:170,
+	backgroundColor: '#e20177',
+	color: '#fff'
 });
 
 // Adds an event listener to the button that opens an email dialog when the button is clicked/tapped
