@@ -60,8 +60,8 @@ var button = Ti.UI.createButton({
 button.addEventListener('click',function(e)
 {
    	var emailDialog = Ti.UI.createEmailDialog();
-	emailDialog.subject = "Gevleugeld Woord via de PJ Info-app";
-	emailDialog.toRecipients = ['mennohellinga@zoho.com'];
+	emailDialog.subject = "Gevleugelde Woorden; via Blind Turtle";
+	emailDialog.toRecipients = ['mennohellinga@zoho.com'];	// CHANGE BEFORE RELEASE!
 	emailDialog.open();
 });
 
