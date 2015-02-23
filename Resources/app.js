@@ -10,8 +10,30 @@ var mainview = Titanium.UI.createView({
 
 win.add(mainview);
 
+var subst = 1;
+var prevdate;
+var tables = [];
+//edit this:
+var schoollink = 'gym';
+var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
+while 1 {
+	parselink = link + subst + '.htm';
+	var html = $($.parseHTML(parselink, document, false));
+	date = html.match(/\d{2}-\d{2}-\d{4}/);
+	if (prevdate == date || subst = 1){
+		tables = tables.concat(html.match(/(<tr.*<\/tr>)/mg));
+		subst = subst + 1;
+		prevdate = date;
+	} else {
+		break;
+	}
+}
+var dschedule = Titanium.Filesystem.getFile('schedulechanges.html');
+var template = Titanium.Filesystem.getFile('schedulechangestemplate.html');
+dschedule.write(template.read() + tables + '</center>');
+
 var webview1 = Titanium.UI.createWebView({
-	url:'http://www3.pj.nl/gym_info_leerlingen/'
+	url:'schedulechanges.html';
 });
 
 mainview.add(webview1);
