@@ -1,15 +1,3 @@
-var win = Titanium.UI.createWindow({
-	backgroundColor: 'white',
-	exitOnClose: true
-});
-
-var mainview = Titanium.UI.createView({
-	height:'72.5%',
-	top:'15%'
-});
-
-win.add(mainview);
-
 function loadRooster() {
 	var subst = 1;
 	var prevdate;
@@ -31,12 +19,24 @@ function loadRooster() {
 	}
 	var dschedule = Titanium.Filesystem.getFile('schedulechanges.html');
 	var template = Titanium.Filesystem.getFile('schedulechangestemplate.html');
-	dschedule.write(template.read() + tables + '</center>');
+	dschedule.write(template.read() + tables + '</center></body></html>');
 }
+
+var win = Titanium.UI.createWindow({
+	backgroundColor: 'white',
+	exitOnClose: true
+});
+
+var mainview = Titanium.UI.createView({
+	height:'72.5%',
+	top:'15%'
+});
+
+win.add(mainview);
 
 loadRooster();
 var webview1 = Titanium.UI.createWebView({
-	url:'schedulechanges.html';
+	url:'schedulechanges.html'
 });
 
 mainview.add(webview1);
