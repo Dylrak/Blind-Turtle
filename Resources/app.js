@@ -1,15 +1,15 @@
-function loadRooster() {
+function loadschedule() {
 	var subst = 1;
 	var prevdate;
 	var tables = [];
-	//edit this:
+	// EDIT THIS!
 	var schoollink = 'gym';
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
-	while 1 {
+	while (subst == 1) {
 		parselink = link + subst + '.htm';
 		var html = $($.parseHTML(parselink, document, false));
 		date = html.match(/\d{2}-\d{2}-\d{4}/);
-		if (prevdate == date || subst = 1){
+		if (prevdate == date || subst == 1){
 			tables = tables.concat(html.match(/(<tr.*<\/tr>)/mg));
 			subst = subst + 1;
 			prevdate = date;
@@ -34,16 +34,25 @@ var mainview = Titanium.UI.createView({
 
 win.add(mainview);
 
-loadRooster();
+loadschedule();
+
 var webview1 = Titanium.UI.createWebView({
 	url:'schedulechanges.html'
 });
 
+var webview1EventListener = function() {
+	webview1.reload();
+};
+	
 mainview.add(webview1);
 
 var webview2 = Titanium.UI.createWebView({
 	url:'http://www3.pj.nl/infoschermgymnasium/'
 });
+
+var webview2EventListener = function() {
+	webview2.reload();
+};
 
 var actionbar = Titanium.UI.createView({
 	backgroundColor:'#dc006d',
@@ -77,6 +86,18 @@ settingsbutton.addEventListener('click',function(){
 		height:'15%'
 	});
 	
+	var backbutton = Titanium.UI.createImageView({
+		image:'back.png',
+		height:'60%',
+		left:'5%'
+	});
+	
+	backbutton.addEventListener('click',function(e){
+		settingswin.close();
+	});
+	
+	actionbar.add(backbutton);
+	
 	var titlelabel = Titanium.UI.createLabel({
 		text:'Instellingen',
 		textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
@@ -96,12 +117,6 @@ var refreshbutton = Titanium.UI.createImageView({
 	image:'refresh.png',
 	height:'60%',
 	right:'5%'
-});
-
-refreshbutton.addEventListener('click',function(){
-	loadRooster();
-	webview1.reload();
-	webview2.reload();
 });
 
 actionbar.add(refreshbutton);
@@ -187,6 +202,10 @@ label1.addEventListener('click',function(){
 	
 	imageview.backgroundColor = '#003c6d';
 	
+	refreshbutton.removeEventListener('click',webview2EventListener);
+	
+	refreshbutton.addEventListener('click',webview1EventListener);
+	
 	mainview.remove(webview2);
 	mainview.add(webview1);
 });
@@ -198,6 +217,10 @@ label2.addEventListener('click',function(){
 	label2.backgroundColor = '#fff';
 	
 	imageview.backgroundColor = '#003c6d';
+	
+	refreshbutton.removeEventListener('click',webview1EventListener);
+	
+	refreshbutton.addEventListener('click',webview2EventListener);
 	
 	mainview.remove(webview1);
 	mainview.add(webview2);
