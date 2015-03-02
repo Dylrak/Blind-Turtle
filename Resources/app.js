@@ -5,7 +5,7 @@ function loadschedule() {
 	// EDIT THIS!
 	var schoollink = 'gym';
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
-	while (subst == 1) {
+	while (1) {
 		parselink = link + subst + '.htm';
 		var html = $($.parseHTML(parselink, document, false));
 		date = html.match(/\d{2}-\d{2}-\d{4}/);
