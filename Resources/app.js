@@ -1,6 +1,5 @@
 function loadschedule() {
 	var subst = 1;
-	var prevdate;
 	var tables = [];
 	// EDIT THIS!
 	var schoollink = 'gym';
@@ -36,10 +35,13 @@ var mainview = Titanium.UI.createView({
 
 win.add(mainview);
 
-loadschedule();
+// Function doesn't work yet
+// loadschedule();
 
 var webview1 = Titanium.UI.createWebView({
-	url:'schedulechanges.html'
+	// Change when function works
+	// url:'schedulechanges.html'
+	url:'http://www3.pj.nl/gym_info_leerlingen/'
 });
 
 var webview1EventListener = function() {
@@ -106,10 +108,51 @@ settingsbutton.addEventListener('click',function(){
 		color:'#fff',
 		font:{fontSize:28}
 	});
+		
+	var setschoolbutton = Titanium.UI.createButton({
+		title:'Kies je school...',
+		top:'40%',
+		height:60,
+		width:150,
+		borderWidth:2,
+		borderColor:'#003c6d',
+		backgroundColor:'#fff',
+		color:'#003c6d'
+	});
+	
+	var schools = ['!mpulse', '!mpulse Kollum', 'Dalton Dokkum', 'De Brêge', 'De Dyk', 'De Foorakker',
+	'ISK', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium', 'YnSicht'];
+	
+	setschoolbutton.addEventListener('click',function(){
+		var schooloptions = {
+		title:'School selecteren',
+		options:schools
+		};
+		var setschool = Ti.UI.createOptionDialog(schooloptions);
+		setschool.show();
+		setschool.addEventListener('click', onSelectOptionDialog);
+		function onSelectOptionDialog(event){
+		    var selectedIndex = event.source.selectedIndex;
+		    if (schools[selectedIndex] != null) {
+		    	settingswin.remove(setschoolbutton);
+			    setschoolbutton.title=schools[selectedIndex];
+			    settingswin.add(setschoolbutton);
+		    }
+		}
+	});
+	
+	var setclasstextfield = Titanium.UI.createTextField({
+		hintText:'Typ je klas...',
+		width:150,
+		top:'65%',
+		color:'#003c6d'
+	});
 	
 	actionbar.add(titlelabel);
 	
 	settingswin.add(actionbar);
+	settingswin.add(setschoolbutton);
+	settingswin.add(setclasstextfield);
 	settingswin.open();
 });
 
@@ -254,8 +297,7 @@ imageview.addEventListener('click',function(){
 		color: '#fff'
 	});
 	
-	gwbutton.addEventListener('click',function(e)
-	{
+	gwbutton.addEventListener('click',function(e){
 	   	var emailDialog = Ti.UI.createEmailDialog();
 		emailDialog.subject = "Gevleugelde Woorden via PJ Info";
 		emailDialog.toRecipients = ['mennohellinga@zoho.com'];	// CHANGE BEFORE RELEASE!
