@@ -7,12 +7,14 @@ function loadschedule() {
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
 	while (1) {
 		parselink = link + subst + '.htm';
-		var html = $($.parseHTML(parselink, document, false));
-		date = html.match(/\d{2}-\d{2}-\d{4}/);
-		if (prevdate == date || subst == 1){
+		var webviewlink = Titanium.UI.createWebView({
+			url:parselink
+		});
+		var html = Titanium.UI.WebView.getHtml();
+		var paginas = html.match(/Pagina (\d) \/ (\d)/);
+		if ((paginas[1] <= paginas[2] && paginas[1]!== null) || subst == 1){
 			tables = tables.concat(html.match(/(<tr.*<\/tr>)/mg));
 			subst = subst + 1;
-			prevdate = date;
 		} else {
 			break;
 		}
