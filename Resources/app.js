@@ -1,3 +1,17 @@
+function httpGet(theUrl)
+{
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            return xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET", theUrl, false );
+    xmlhttp.send();    
+}
+
 function loadschedule() {
 	var subst = 1;
 	var tables = [];
@@ -6,10 +20,7 @@ function loadschedule() {
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
 	while (1) {
 		parselink = link + subst + '.htm';
-		var webviewlink = Titanium.UI.createWebView({
-			url:parselink
-		});
-		var html = Titanium.UI.WebView.getHtml();
+                var html = httpGet(parselink);
 		var paginas = html.match(/Pagina (\d) \/ (\d)/);
 		if ((paginas[1] <= paginas[2] && paginas[1]!== null) || subst == 1){
 			tables = tables.concat(html.match(/(<tr.*<\/tr>)/mg));
