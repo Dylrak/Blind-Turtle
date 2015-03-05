@@ -1,17 +1,18 @@
-function httpGet(theUrl)
-{
-    xmlhttp=new XMLHttpRequest();
-    xmlhttp.onreadystatechange=function()
-    {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        {
-            return xmlhttp.responseText;
-        }
-    }
-    xmlhttp.open("GET", theUrl, false );
-    xmlhttp.send();    
+function getHTML(URL) {
+var client = Ti.Network.createHTTPClient({
+	onload : function(e) {
+		Ti.API.info("Received HTML!");
+		return this.responseText;
+	}
+	onerror : function(e) {
+		Ti.API.debug(e.error);
+		alert('Internetverbinding mislukt. Probeer het later opnieuw.');
+	}
+	timeout : 5000
+})
+client.open("GET", URL)
+client.send();
 }
-
 function loadschedule() {
 	var subst = 1;
 	var tables = [];
@@ -20,12 +21,13 @@ function loadschedule() {
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
 	while (1) {
 		parselink = link + subst + '.htm';
-                var html = httpGet(parselink);
+		var html = getHTML(parselink);
 		var paginas = html.match(/Pagina (\d) \/ (\d)/);
-		if ((paginas[1] <= paginas[2] && paginas[1]!== null) || subst == 1){
+		if ((paginas[1]!== null && paginas[1] <= paginas[2]) || subst == 1){
 			tables = tables.concat(html.match(/(<tr.*<\/tr>)/mg));
 			subst = subst + 1;
-		} else {
+		} 
+		if (paginas[1] == paginas[2]){
 			break;
 		}
 	}
