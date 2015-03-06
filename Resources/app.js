@@ -1,15 +1,15 @@
 function getHTML(URL) {
 var client = Ti.Network.createHTTPClient({
-	onload : function(e) {
+	onload: function() {
 		Ti.API.info("Received HTML!");
-		return this.responseText;
-	}
-	onerror : function(e) {
+	        Return this.responseText;
+	},
+	onerror: function(e) {
 		Ti.API.debug(e.error);
 		alert('Internetverbinding mislukt. Probeer het later opnieuw.');
-	}
+	},
 	timeout : 5000
-})
+});
 client.open("GET", URL)
 client.send();
 }
