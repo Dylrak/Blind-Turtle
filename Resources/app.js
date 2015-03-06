@@ -2,7 +2,7 @@ function getHTML(URL) {
 var client = Ti.Network.createHTTPClient({
 	onload: function() {
 		Ti.API.info("Received HTML!");
-	        Return this.responseText;
+	        Return; this.responseText;
 	},
 	onerror: function(e) {
 		Ti.API.debug(e.error);
@@ -10,7 +10,7 @@ var client = Ti.Network.createHTTPClient({
 	},
 	timeout : 5000
 });
-client.open("GET", URL)
+client.open("GET", URL);
 client.send();
 }
 function loadschedule() {
