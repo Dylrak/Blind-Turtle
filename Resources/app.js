@@ -1,10 +1,10 @@
 function getHTML(URL) {
 var client = Ti.Network.createHTTPClient({
-	onload: function() {
+	onload: function(){
 		Ti.API.info("Received HTML!");
 	        Return; this.responseText;
 	},
-	onerror: function(e) {
+	onerror: function(e){
 		Ti.API.debug(e.error);
 		alert('Internetverbinding mislukt. Probeer het later opnieuw.');
 	},
@@ -13,7 +13,8 @@ var client = Ti.Network.createHTTPClient({
 client.open("GET", URL);
 client.send();
 }
-function loadschedule() {
+
+function loadschedule(){
 	var subst = 1;
 	var tables = [];
 	// EDIT THIS!
@@ -42,22 +43,21 @@ var win = Titanium.UI.createWindow({
 });
 
 var mainview = Titanium.UI.createView({
-	height:'72.5%',
-	top:'15%'
+	height:'81%',
+	top:'10%'
 });
 
 win.add(mainview);
 
-// Function doesn't work yet
+// Enable when function works
 // loadschedule();
 
 var webview1 = Titanium.UI.createWebView({
-	// Change when function works
-	// url:'schedulechanges.html'
+	// Change to url:'schedulechanges.html' when function works
 	url:'http://www3.pj.nl/gym_info_leerlingen/'
 });
 
-var webview1EventListener = function() {
+var webview1EventListener = function(){
 	webview1.reload();
 };
 	
@@ -67,29 +67,35 @@ var webview2 = Titanium.UI.createWebView({
 	url:'http://www3.pj.nl/infoschermgymnasium/'
 });
 
-var webview2EventListener = function() {
+var webview2EventListener = function(){
 	webview2.reload();
 };
 
 var actionbar = Titanium.UI.createView({
 	backgroundColor:'#dc006d',
 	top:0,
-	height:'15%'
+	height:'10%'
 });
 
 var titlelabel = Titanium.UI.createLabel({
 	text:'PJ Info',
 	textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
 	color:'#fff',
-	font:{fontSize:28}
+	font:{fontSize:24}
 });
 
 actionbar.add(titlelabel);
 
 var settingsbutton = Titanium.UI.createImageView({
 	image:'settings.png',
-	height:'60%',
-	left:'5%'
+	height:'80%',
+	left:'3%'
+});
+
+var settingsactionbar = Titanium.UI.createView({
+	backgroundColor:'#dc006d',
+	top:0,
+	height:'10%'
 });
 
 settingsbutton.addEventListener('click',function(){
@@ -97,34 +103,28 @@ settingsbutton.addEventListener('click',function(){
 		backgroundColor:'#fff'
 	});
 	
-	var actionbar = Titanium.UI.createView({
-		backgroundColor:'#dc006d',
-		top:0,
-		height:'15%'
-	});
-	
 	var backbutton = Titanium.UI.createImageView({
 		image:'back.png',
-		height:'60%',
-		left:'5%'
+		height:'80%',
+		left:'3%'
 	});
 	
 	backbutton.addEventListener('click',function(e){
 		settingswin.close();
 	});
 	
-	actionbar.add(backbutton);
+	settingsactionbar.add(backbutton);
 	
 	var titlelabel = Titanium.UI.createLabel({
 		text:'Instellingen',
 		textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
 		color:'#fff',
-		font:{fontSize:28}
+		font:{fontSize:24}
 	});
 		
 	var setschoolbutton = Titanium.UI.createButton({
 		title:'Kies je school...',
-		top:'40%',
+		top:'35%',
 		height:60,
 		width:150,
 		borderWidth:2,
@@ -154,18 +154,54 @@ settingsbutton.addEventListener('click',function(){
 		}
 	});
 	
-	var setclasstextfield = Titanium.UI.createTextField({
-		hintText:'Typ je klas...',
-		width:150,
+	var years = ['Leerjaar 1', 'Leerjaar 2', 'Leerjaar 3', 'Leerjaar 4', 'Leerjaar 5', 'Leerjaar 6'];
+	
+	var setyearbutton = Titanium.UI.createButton({
+		title:'Kies je leerjaar...',
 		top:'65%',
+		height:60,
+		width:150,
+		borderWidth:2,
+		borderColor:'#003c6d',
+		backgroundColor:'#fff',
 		color:'#003c6d'
 	});
 	
-	actionbar.add(titlelabel);
+	setyearbutton.addEventListener('click',function(){
+		var yearoptions = {
+		title:'Leerjaar selecteren',
+		options:years
+		};
+		var setyear = Ti.UI.createOptionDialog(yearoptions);
+		setyear.show();
+		setyear.addEventListener('click', onSelectOptionDialog);
+		function onSelectOptionDialog(event){
+		    var selectedIndex = event.source.selectedIndex;
+		    if (years[selectedIndex] != null) {
+		    	settingswin.remove(setyearbutton);
+			    setyearbutton.title=years[selectedIndex];
+			    settingswin.add(setyearbutton);
+		    }
+		}
+	});
 	
-	settingswin.add(actionbar);
+	Ti.Gesture.addEventListener('orientationchange', function(e){
+		if(e.source.isPortrait()) {
+			settingsactionbar.applyProperties({
+				height:'10%'
+			});
+		} else if(e.source.isLandscape()) {
+			settingsactionbar.applyProperties({
+				height:'15%'
+			});
+		};
+	});
+
+	settingsactionbar.add(titlelabel);
+	
+	settingswin.add(settingsactionbar);
 	settingswin.add(setschoolbutton);
-	settingswin.add(setclasstextfield);
+	settingswin.add(setyearbutton);
 	settingswin.open();
 });
 
@@ -173,8 +209,8 @@ actionbar.add(settingsbutton);
 
 var refreshbutton = Titanium.UI.createImageView({
 	image:'refresh.png',
-	height:'60%',
-	right:'5%'
+	height:'80%',
+	right:'3%'
 });
 
 actionbar.add(refreshbutton);
@@ -182,7 +218,7 @@ win.add(actionbar);
 
 var tabsview = Titanium.UI.createView({
 	bottom:0,
-	height:'15%',
+	height:'10%',
 	left:0,
 	right:0
 });
@@ -192,7 +228,7 @@ win.add(tabsview);
 var label1 = Titanium.UI.createLabel({
 	text:'Roosterwijzigingen',
 	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-	top:'15%',
+	top:'10%',
 	bottom:0,
 	left:0,
 	width:'43%',
@@ -203,7 +239,7 @@ var label1 = Titanium.UI.createLabel({
 var label2 = Titanium.UI.createLabel({
 	text:'Mededelingen',
 	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-	top:'15%',
+	top:'10%',
 	bottom:0,
 	left:'44%',
 	width:'34%',
@@ -212,10 +248,10 @@ var label2 = Titanium.UI.createLabel({
 });
 
 var imageview = Titanium.UI.createView({
-	top:'15%',
+	top:'10%',
 	bottom:0,
 	left:'79%',
-	height:'85%',
+	height:'90%',
 	width:'21%',
 	backgroundColor:'#003c6d'
 });
@@ -228,7 +264,7 @@ imageview.add(image);
 
 var divisionborder1 = Ti.UI.createView({
     backgroundColor:'#dc006d',
-    top:'15%',
+    top:'10%',
     bottom:0,
     width:'1%',
     left:'43%',
@@ -237,7 +273,7 @@ var divisionborder1 = Ti.UI.createView({
 
 var divisionborder2 = Ti.UI.createView({
     backgroundColor:'#dc006d',
-    top:'15%',
+    top:'10%',
     bottom:0,
     width:'1%',
     left:'78%',
@@ -250,6 +286,74 @@ tabsview.add(divisionborder2);
 tabsview.add(label1);
 tabsview.add(label2);
 tabsview.add(imageview);
+
+Ti.Gesture.addEventListener('orientationchange', function(e){
+	if(e.source.isPortrait()) {
+		mainview.applyProperties({
+			height:'81%',
+			top:'10%'
+		});
+		actionbar.applyProperties({
+			height:'10%'
+		});
+		tabsview.applyProperties({
+			height:'10%'
+		});
+		label1.applyProperties({
+			top:'10%'
+		});
+		label2.applyProperties({
+			top:'10%'
+		});
+		imageview.applyProperties({
+			height:'90%',
+			top:'10%'
+		});
+		divisionborder1.applyProperties({
+			top:'10%'
+		});
+		divisionborder2.applyProperties({
+			top:'10%'
+		});
+		settingsbutton.addEventListener('click',function(e){
+			settingsactionbar.applyProperties({
+				height:'10%'
+			});
+		});
+	} else if(e.source.isLandscape()) {
+		mainview.applyProperties({
+			height:'72.5%',
+			top:'15%'
+		});
+		actionbar.applyProperties({
+			height:'15%'
+		});
+		tabsview.applyProperties({
+			height:'15%'
+		});
+		label1.applyProperties({
+			top:'15%'
+		});
+		label2.applyProperties({
+			top:'15%'
+		});
+		imageview.applyProperties({
+			height:'85%',
+			top:'15%'
+		});
+		divisionborder1.applyProperties({
+			top:'15%'
+		});
+		divisionborder2.applyProperties({
+			top:'15%'
+		});
+		settingsbutton.addEventListener('click',function(e){
+			settingsactionbar.applyProperties({
+				height:'15%'
+			});
+		});
+	};
+});
 
 label1.addEventListener('click',function(){
 	label1.color = '#003c6d';
@@ -298,8 +402,8 @@ imageview.addEventListener('click',function(){
 	
 	var stentorview = Titanium.UI.createView({
     	backgroundColor: '#fff',
-    	height:'72.5%',
-    	top:'15%'
+    	height:'81%',
+    	top:'10%'
 	});
 	
 	var gwbutton = Ti.UI.createButton({
