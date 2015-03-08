@@ -2,7 +2,7 @@ function getHTML(URL) {
 var client = Ti.Network.createHTTPClient({
 	onload: function(){
 		Ti.API.info("Received HTML!");
-	        Return; this.responseText;
+		return this.responseText;
 	},
 	onerror: function(e){
 		Ti.API.debug(e.error);
@@ -23,12 +23,13 @@ function loadschedule(){
 	while (1) {
 		parselink = link + subst + '.htm';
 		var html = getHTML(parselink);
-		var paginas = html.match(/Pagina (\d) \/ (\d)/);
-		if ((paginas[1]!== null && paginas[1] <= paginas[2]) || subst == 1){
-			tables = tables.concat(html.match(/(<tr.*<\/tr>)/mg));
+		var regex = /Pagina (\d) \/ (\d)/;
+		var paginas = regex.exec(html);
+		if ((paginas[0]!== null && paginas[0] <= paginas[1]) || subst == 1){
+			tables.push(html.exec(/(<tr.*<\/tr>)/mg));
 			subst = subst + 1;
 		} 
-		if (paginas[1] == paginas[2]){
+		if (paginas[0] == paginas[1]){
 			break;
 		}
 	}
