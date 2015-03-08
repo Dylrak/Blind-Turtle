@@ -26,7 +26,7 @@ function loadschedule(){
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(html);
 		if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
-			tables.push(html.exec(/(<tr.*<\/tr>)/mg));
+			tables.push(/(<tr.*<\/tr>)/mg.exec(html));
 			subst = subst + 1;
 		} 
 		if (paginas[0] == paginas[1]){
