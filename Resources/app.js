@@ -25,7 +25,7 @@ function loadschedule(){
 		var html = getHTML(parselink);
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(html);
-		if ((paginas[0]!== null && paginas[0] <= paginas[1]) || subst == 1){
+		if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
 			tables.push(html.exec(/(<tr.*<\/tr>)/mg));
 			subst = subst + 1;
 		} 
