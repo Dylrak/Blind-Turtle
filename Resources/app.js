@@ -29,7 +29,7 @@ function loadschedule(){
 			tables.push(/(<tr.*<\/tr>)/mg.exec(html));
 			subst = subst + 1;
 		} 
-		if (paginas[0] == paginas[1]){
+		if (paginas == null || paginas[0] == paginas[1]){
 			break;
 		}
 	}
