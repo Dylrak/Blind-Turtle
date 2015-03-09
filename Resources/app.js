@@ -33,8 +33,9 @@ function loadschedule(){
 			break;
 		}
 	}
-	var dschedule = Titanium.Filesystem.getFile('schedulechanges.html');
-	var template = Titanium.Filesystem.getFile('schedulechangestemplate.html');
+	var schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.tempDirectory,'schedulechanges');
+	var dschedule = Titanium.Filesystem.getFile(schedulechanges.nativePath,'schedulechanges.html');
+	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
 	dschedule.write(template.read() + tables + '</center></body></html>');
 }
 
