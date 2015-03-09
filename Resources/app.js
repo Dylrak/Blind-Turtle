@@ -36,11 +36,7 @@ function loadschedule(){
 	var schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.tempDirectory,'schedulechanges');
 	var dschedule = Titanium.Filesystem.getFile(schedulechanges.nativePath,'schedulechanges.html');
 	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
-	dschedule.createFile();
-	
-	if (dschedule.exists()){
 	dschedule.write(template.read() + tables + '</center></body></html>');
-	}
 }
 
 var win = Titanium.UI.createWindow({
