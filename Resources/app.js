@@ -53,8 +53,9 @@ win.add(mainview);
 
 loadschedule();
 
+var localfile = Titanium.Filesystem.tempDirectory + 'schedulechanges.html';
 var webview1 = Titanium.UI.createWebView({
-	url:'schedulechanges.html'
+	url: localfile
 });
 
 var webview1EventListener = function(){
