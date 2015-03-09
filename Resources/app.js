@@ -51,12 +51,10 @@ var mainview = Titanium.UI.createView({
 
 win.add(mainview);
 
-// Enable when function works
-// loadschedule();
+loadschedule();
 
 var webview1 = Titanium.UI.createWebView({
-	// Change to url:'schedulechanges.html' when function works
-	url:'http://www3.pj.nl/gym_info_leerlingen/'
+	url:'schedulechanges.html'
 });
 
 var webview1EventListener = function(){
