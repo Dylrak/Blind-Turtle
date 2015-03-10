@@ -1,3 +1,5 @@
+var schedulechanges;
+
 function getHTML(URL) {
 var client = Ti.Network.createHTTPClient({
 	onload: function(){
@@ -33,7 +35,7 @@ function loadschedule(){
 			break;
 		}
 	}
-	var schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory(),'schedulechanges.html');
+	schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory(),'schedulechanges.html');
 	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
 	//Enter year filtering here
 	schedulechanges.write(template.read() + tables + '</center></body></html>');
