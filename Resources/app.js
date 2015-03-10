@@ -33,10 +33,10 @@ function loadschedule(){
 			break;
 		}
 	}
-	var schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.tempDirectory,'schedulechanges');
-	var dschedule = Titanium.Filesystem.getFile(schedulechanges.nativePath,'schedulechanges.html');
+	var schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory(),'schedulechanges.html');
 	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
-	dschedule.write(template.read() + tables + '</center></body></html>');
+	//Enter year filtering here
+	schedulechanges.write(template.read() + tables + '</center></body></html>');
 }
 
 var win = Titanium.UI.createWindow({
@@ -53,9 +53,8 @@ win.add(mainview);
 
 loadschedule();
 
-var localfile = Titanium.Filesystem.tempDirectory + 'schedulechanges.html';
 var webview1 = Titanium.UI.createWebView({
-	url: localfile
+	url: schedulechanges.nativePath
 });
 
 var webview1EventListener = function(){
