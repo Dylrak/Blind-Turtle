@@ -39,7 +39,8 @@ function loadschedule(){
 	schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory(),'schedulechanges.html');
 	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
 	//Enter year filtering here
-	schedulechanges.write(template.read() + tables + '</center></tbody></table></body></html>');
+	stringTables = tables.join(" ");
+	schedulechanges.write(template.read() + stringTables + '</center></tbody></table></body></html>');
 }
 
 var win = Titanium.UI.createWindow({
