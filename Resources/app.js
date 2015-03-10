@@ -35,12 +35,13 @@ function loadschedule(){
 			break;
 		}
 	}
-	Ti.App.info(tables);
+	Ti.API.info(tables);
 	schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory(),'schedulechanges.html');
 	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
 	//Enter year filtering here
-	stringTables = tables.join(" ");
-	schedulechanges.write(template.read() + stringTables + '</center></tbody></table></body></html>');
+	tablesString = tables.join(" ");
+	var templateString = template.read();
+	schedulechanges.write(templateString + tablesString + '</center></tbody></table></body></html>');
 }
 
 var win = Titanium.UI.createWindow({
