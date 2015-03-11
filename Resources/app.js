@@ -1,4 +1,5 @@
 var schedulechanges;
+var infoScreen;
 
 function getHTML(URL) {
 var client = Ti.Network.createHTTPClient({
@@ -44,6 +45,16 @@ function loadschedule(){
 	schedulechanges.write(templateString + tablesString + '</center></tbody></table></body></html>');
 }
 
+function loadInfoscreen (){
+	// EDIT THIS!
+	var HTMLSource = getHTML ('www3.pj.nl/infoschermgymnasium/');
+	var infoScreenWhite = HTMLSource.replace ('FFFBA4', 'FFFFFF');
+	var infoScreenPrevSpaceGone = infoScreenWhite.replace ('<p class=MsoPlainText align=center style=\'text-align:center\'><span\nstyle=\'font-size:24.0pt;font-family:"Arial","sans-serif";color:red\'><o:p>&nbsp;</o:p></span></p>', ' ');
+	var infoScreenFinal = infoScreenPrevSpaceGone.replace (/<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img, '</div>');
+	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory(), 'infoScreen.html');
+	infoScreen.write (infoScreenFinal);
+}
+
 var win = Titanium.UI.createWindow({
 	backgroundColor: 'white',
 	exitOnClose: true
@@ -57,6 +68,7 @@ var mainview = Titanium.UI.createView({
 win.add(mainview);
 
 loadschedule();
+loadInfoscreen ();
 
 var webview1 = Titanium.UI.createWebView({
 	url: schedulechanges.nativePath
@@ -69,7 +81,7 @@ var webview1EventListener = function(){
 mainview.add(webview1);
 
 var webview2 = Titanium.UI.createWebView({
-	url:'http://www3.pj.nl/infoschermgymnasium/'
+	url: infoScreen.nativePath
 });
 
 var webview2EventListener = function(){
