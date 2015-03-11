@@ -36,7 +36,7 @@ function loadschedule(){
 			break;
 		}
 	}
-	schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory(),'schedulechanges.html');
+	schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,'schedulechanges.html');
 	var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
 	//Enter year filtering here
 	tablesString = tables.join(" ");
@@ -51,8 +51,9 @@ function loadInfoscreen (){
 	var HTMLSource = getHTML ('www3.pj.nl/infoschermgymnasium');
 	//var infoScreenWhite = HTMLSource.replace ("FFFBA4", "FFFFFF");
 	//var infoScreenPrevSpaceGone = infoScreenWhite.replace ('<p class=MsoPlainText align=center style=\'text-align:center\'><span\nstyle=\'font-size:24.0pt;font-family:"Arial","sans-serif";color:red\'><o:p>&nbsp;</o:p></span></p>', ' ');
-	var infoScreenFinal = HTMLSource.replace (/<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img, '</div>');
-	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory(), 'infoScreen.html');
+	var infoScreenFinal = HTMLSource.replace (s/<\/div>/<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img
+	, );
+	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory, 'infoScreen.html');
 	infoScreen.write (infoScreenFinal);
 }
 
