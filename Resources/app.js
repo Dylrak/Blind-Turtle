@@ -49,15 +49,20 @@ function loadschedule(){
 function loadInfoscreen (){
 	// EDIT THIS!
 	var HTMLSource = getHTML ('www3.pj.nl/infoschermgymnasium');
-	var regColor = /ffba4/i;
-	var infoScreenWhite = HTMLSource.replace (regColor, "FFFFFF");
-	var regStartWhite = /<p class=MsoPlainText align=center style=\'text-align:center\'><span\nstyle=\'font-size:24.0pt;font-family:"Arial","sans-serif";color:red\'><o:p>&nbsp;<\/o:p><\/span><\/p>/img;
-	var infoScreenPrevSpaceGone = infoScreenWhite.replace (regStartWhite, ' ');
-	var regRedundancies = /<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img;
-	var infoScreenFinal = "foo".replace (regRedundancies, '</div>');
-	var infoScreenFinal = HTMLSource.replace (/<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img, '</div>');
 	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory, 'infoScreen.html');
-	infoScreen.write (infoScreenFinal);
+	if(HTMLSource == null){
+		infoScreen.write ('<!DOCTYPE html><html><head></head><body><center><h1>Geen Internetverbinding!</h1></center></body></html>');
+		return null;
+	}else{
+		var regColor = /ffba4/img;
+		var infoScreenWhite = HTMLSource.replace (regColor, "FFFFFF");
+		var regStartWhite = /<p class=MsoPlainText align=center style=\'text-align:center\'><span\nstyle=\'font-size:24.0pt;font-family:"Arial","sans-serif";color:red\'><o:p>&nbsp;<\/o:p><\/span><\/p>/img;
+		var infoScreenPrevSpaceGone = infoScreenWhite.replace (regStartWhite, ' ');
+		var regRedundancies = /<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img;
+		var infoScreenFinal = "foo".replace (regRedundancies, '</div>');
+		var infoScreenFinal = HTMLSource.replace (/<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img, '</div>');
+		infoScreen.write (infoScreenFinal);
+	}
 }
 
 var win = Titanium.UI.createWindow({
