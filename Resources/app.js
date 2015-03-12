@@ -1,5 +1,6 @@
 var schedulechanges;
 var infoScreen;
+var html;
 
 function getHTML(URL, callback) {
 var client = Ti.Network.createHTTPClient({
@@ -27,7 +28,6 @@ function loadschedule(){
 	var schoollink = 'gym';
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
 	while (1) {
-		var html;
 		parselink = link + subst + '.htm';
 		getHTML(parselink, function(sourcecode){
 			html = sourcecode;
