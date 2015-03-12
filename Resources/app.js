@@ -244,7 +244,11 @@ refreshbutton.addEventListener('click',function()	{
 	refreshbutton.opacity='0.5';
 	setTimeout(function(){
 		refreshbutton.opacity='1.0';
+<<<<<<< HEAD
 	}, 75);
+=======
+	}, 50);
+>>>>>>> origin/master
 });
 
 actionbar.add(refreshbutton);
