@@ -135,6 +135,10 @@ settingsbutton.addEventListener('click',function(){
 	var settingswin = Titanium.UI.createWindow({
 		backgroundColor:'#fff'
 	});
+	settingsbutton.opacity='0.3';
+	setTimeout(function(){
+		settingsbutton.opacity='1.0';
+	}, 90);
 	
 	var backbutton = Titanium.UI.createImageView({
 		image:'back.png',
@@ -144,6 +148,10 @@ settingsbutton.addEventListener('click',function(){
 	
 	backbutton.addEventListener('click',function(e){
 		settingswin.close();
+		backbutton.opacity='0.3';
+		setTimeout(function(){
+			backbutton.opacity='1.0';
+		}, 90);
 	});
 	
 	settingsactionbar.add(backbutton);
@@ -237,7 +245,6 @@ settingsbutton.addEventListener('click',function(){
 	settingswin.add(setyearbutton);
 	settingswin.open();
 });
-
 actionbar.add(settingsbutton);
 
 var refreshbutton = Titanium.UI.createImageView({
@@ -246,10 +253,12 @@ var refreshbutton = Titanium.UI.createImageView({
 	right:'3%'
 });
 refreshbutton.addEventListener('click',function()	{
-	refreshbutton.opacity='0.5';
+	refreshbutton.opacity='0.3';
 	setTimeout(function(){
 		refreshbutton.opacity='1.0';
-	}, 75);
+	}, 90);
+	loadschedule();
+	loadInfoscreen();
 });
 
 actionbar.add(refreshbutton);
