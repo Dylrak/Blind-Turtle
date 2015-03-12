@@ -29,7 +29,7 @@ function loadschedule(){
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(html);
 		if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
-			tables.push(/(<tr.*<\/tr>)/mg.exec(html));
+			tables.push(/<tr.*<\/tr>/mg.exec(html));
 			subst = subst + 1;
 		} 
 		if (paginas == null || paginas[0] == paginas[1]){
@@ -41,8 +41,9 @@ function loadschedule(){
 	//Enter year filtering here
 	tablesString = tables.join(" ");
 	var templateString = template.read();
-	schedulechanges.write(templateString + tablesString + '</tbody></table></center></body></html>');
+	schedulechanges.write(templateString + tablesString + '</table></center></body></html>');
 	Ti.API.info(tablesString);
+	Ti.API.info(html);
 	Ti.API.info(schedulechanges.read());
 }
 
@@ -238,6 +239,12 @@ var refreshbutton = Titanium.UI.createImageView({
 	image:'refresh.png',
 	height:'80%',
 	right:'3%'
+});
+refreshbutton.addEventListener('click',function()	{
+	refreshbutton.opacity='0.5';
+	setTimeout(function(){
+		refreshbutton.opacity='1.0';
+	}, 75);
 });
 
 actionbar.add(refreshbutton);
