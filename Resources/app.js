@@ -239,6 +239,12 @@ var refreshbutton = Titanium.UI.createImageView({
 	height:'80%',
 	right:'3%'
 });
+refreshbutton.addEventListener('click',function()	{
+	refreshbutton.opacity='0.5';
+	setTimeout(function(){
+		refreshbutton.opacity='1.0';
+	}, 50);
+});
 
 actionbar.add(refreshbutton);
 win.add(actionbar);
