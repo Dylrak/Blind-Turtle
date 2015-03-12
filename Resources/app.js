@@ -26,9 +26,10 @@ function loadschedule(){
 	var schoollink = 'gym';
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
 	while (1) {
+		var html;
 		parselink = link + subst + '.htm';
 		getHTML(parselink, function(sourcecode){
-			var html = sourcecode;
+			html = sourcecode;
 		});
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(html);
