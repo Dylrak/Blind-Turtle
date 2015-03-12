@@ -1,11 +1,13 @@
 var schedulechanges;
 var infoScreen;
 
-function getHTML(URL) {
+function getHTML(URL, callback) {
 var client = Ti.Network.createHTTPClient({
 	onload: function(){
 		Ti.API.info("Received HTML!");
-		return this.responseText;
+		if (callback){
+			callback(this.responseText);
+        }
 	},
 	onerror: function(e){
 		Ti.API.debug(e.error);
@@ -25,7 +27,9 @@ function loadschedule(){
 	var link = 'http://www3.pj.nl/' + schoollink + '_info_leerlingen/subst_00';
 	while (1) {
 		parselink = link + subst + '.htm';
-		var html = getHTML(parselink);
+		getHTML(parselink, function(sourcecode){
+			var html = sourcecode;
+		});
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(html);
 		if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
