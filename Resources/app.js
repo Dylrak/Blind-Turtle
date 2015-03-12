@@ -5,7 +5,8 @@ function getHTML(URL, callback) {
 var client = Ti.Network.createHTTPClient({
 	onload: function(){
 		Ti.API.info("Received HTML!");
-		if (callback){
+		if ('function' === typeof callback){
+			Ti.API.info(callback);
 			callback(this.responseText);
         }
 	},
