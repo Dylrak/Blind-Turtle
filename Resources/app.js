@@ -6,7 +6,8 @@ function getHTML(URL, callback) {
 var client = Ti.Network.createHTTPClient({
 	onload: function(){
 		Ti.API.info("Received HTML!");
-		if ('function' === typeof callback){
+		Ti.API.debug(this.responseText);
+		if (callback){
 			Ti.API.info(callback);
 			callback(this.responseText);
         }
@@ -30,7 +31,10 @@ function loadschedule(){
 	while (1) {
 		parselink = link + subst + '.htm';
 		getHTML(parselink, function(sourcecode){
-			html = sourcecode;
+			html = sourcecode || [];
+			if (html.length > 0) {
+				alert(html[0]);
+			}
 		});
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(html);
