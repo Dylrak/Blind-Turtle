@@ -4,6 +4,7 @@ var scheduleHTML;
 var infoHTML;
 var scheduleLoaded = false;
 var infoLoaded = false;
+var error;
 
 function getHTML(URL, callback) {
 	var client = Ti.Network.createHTTPClient({
@@ -18,6 +19,7 @@ function getHTML(URL, callback) {
 		onerror: function(e){
 			Ti.API.debug(e.error);
 			alert('Internetverbinding mislukt. Probeer het later opnieuw.');
+			error = true;
 		},
 		timeout : 5000
 	});
@@ -41,7 +43,7 @@ function loadschedule(){
 			scheduleLoaded = true;
 		});
 		
-		while (!scheduleLoaded){}
+		while (!scheduleLoaded || error){}
 		
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(scheduleHTML);
@@ -75,7 +77,7 @@ function loadInfoscreen (){
 	});
 	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory, 'infoScreen.html');
 	
-	while (!infoLoaded){}
+	while (!infoLoaded || error){}
 	
 	if(HTMLSource == null){
 		infoScreen.write ('<!DOCTYPE html><html><head></head><body><center><h1>Kon het mededelingenscherm niet laden</h1></center></body></html>');
