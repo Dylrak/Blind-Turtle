@@ -48,7 +48,7 @@ function loadschedule(){
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(scheduleHTML);
 		if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
-			tables.push(/<tr.*<\/tr>/mg.exec(html));
+			tables.push(/<tr.*<\/tr>/mg.exec(scheduleHTML));
 			subst = subst + 1;
 		} 
 		if (paginas == null || paginas[0] == paginas[1]){
