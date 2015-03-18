@@ -62,7 +62,7 @@ function loadschedule(){
 	var templateString = template.read();
 	schedulechanges.write(templateString + tablesString + '</table></center></body></html>');
 	Ti.API.info(tablesString);
-	Ti.API.info(html);
+	Ti.API.info(scheduleHTML);
 	Ti.API.info(schedulechanges.read());
 }
 
