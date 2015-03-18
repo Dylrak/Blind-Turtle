@@ -1,25 +1,28 @@
 var schedulechanges;
 var infoScreen;
-var html;
+var scheduleHTML;
+var infoHTML;
+var scheduleLoaded = false;
+var infoLoaded = false;
 
 function getHTML(URL, callback) {
-var client = Ti.Network.createHTTPClient({
-	onload: function(){
-		Ti.API.info("Received HTML!");
-		Ti.API.debug(this.responseText);
-		if (callback){
-			Ti.API.info(callback);
-			callback(this.responseText);
-        }
-	},
-	onerror: function(e){
-		Ti.API.debug(e.error);
-		alert('Internetverbinding mislukt. Probeer het later opnieuw.');
-	},
-	timeout : 5000
-});
-client.open("GET", URL);
-client.send();
+	var client = Ti.Network.createHTTPClient({
+		onload: function(){
+			Ti.API.info("Received HTML!");
+			Ti.API.debug(this.responseText);
+			if (callback){
+				Ti.API.info(callback);
+				callback(this.responseText);
+   	     }
+		},
+		onerror: function(e){
+			Ti.API.debug(e.error);
+			alert('Internetverbinding mislukt. Probeer het later opnieuw.');
+		},
+		timeout : 5000
+	});
+	client.open("GET", URL);
+	client.send();
 }
 
 function loadschedule(){
@@ -31,13 +34,17 @@ function loadschedule(){
 	while (1) {
 		parselink = link + subst + '.htm';
 		getHTML(parselink, function(sourcecode){
-			html = sourcecode || [];
-			if (html.length > 0) {
-				alert(html[0]);
+			scheduleHTML = sourcecode || [];
+			if (scheduleHTML.length > 0) {
+				alert(scheduleHTML[0]);
 			}
+			scheduleLoaded = true;
 		});
+		
+		while (!scheduleLoaded){}
+		
 		var regex = /Pagina (\d) \/ (\d)/;
-		var paginas = regex.exec(html);
+		var paginas = regex.exec(scheduleHTML);
 		if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
 			tables.push(/<tr.*<\/tr>/mg.exec(html));
 			subst = subst + 1;
@@ -59,10 +66,19 @@ function loadschedule(){
 
 function loadInfoscreen (){
 	// EDIT THIS!
-	var HTMLSource = getHTML ('www3.pj.nl/infoschermgymnasium');
+	getHTML ('www3.pj.nl/infoschermgymnasium', function (sourcecode){
+		infoHTML = sourcecode || [];
+		if (infoHTML > 0){
+			alert (infoHTML[0]);
+		}
+		infoLoaded = true;
+	});
 	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory, 'infoScreen.html');
+	
+	while (!infoLoaded){}
+	
 	if(HTMLSource == null){
-		infoScreen.write ('<!DOCTYPE html><html><head></head><body><center><h1>Geen Internetverbinding!</h1></center></body></html>');
+		infoScreen.write ('<!DOCTYPE html><html><head></head><body><center><h1>Kon het mededelingenscherm niet laden</h1></center></body></html>');
 		return null;
 	}else{
 		var regColor = /ffba4/img;
