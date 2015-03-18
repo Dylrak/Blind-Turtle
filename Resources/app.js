@@ -43,7 +43,7 @@ function loadschedule(){
 			scheduleLoaded = true;
 		});
 		
-		while (!scheduleLoaded || error){}
+		//while (!scheduleLoaded || error){}
 		
 		var regex = /Pagina (\d) \/ (\d)/;
 		var paginas = regex.exec(scheduleHTML);
@@ -77,7 +77,7 @@ function loadInfoscreen (){
 	});
 	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory, 'infoScreen.html');
 	
-	while (!infoLoaded || error){}
+	//while (!infoLoaded || error){}
 	
 	if(HTMLSource == null){
 		infoScreen.write ('<!DOCTYPE html><html><head></head><body><center><h1>Kon het mededelingenscherm niet laden</h1></center></body></html>');
