@@ -5,6 +5,7 @@ var infoHTML;
 var scheduleLoaded = false;
 var infoLoaded = false;
 var error;
+var HTMLSource;
 
 function getHTML(URL, callback) {
 	var client = Ti.Network.createHTTPClient({
