@@ -14,7 +14,6 @@ var win = Titanium.UI.createWindow({
 });
 
 function getHTML(URL, filterFunction) {
-	var scheduleLink = 'http://www3.pj.nl/gym_info_leerlingen/subst_001.htm';
 	var infoLink = 'www3.pj.nl/infoschermgymnasium';
 	
 	var client = Ti.Network.createHTTPClient({
@@ -498,3 +497,7 @@ function createWindows (){
 		mainview.add(stentorview);
 	});
 }
+
+//MAIN:
+
+getHTML('http://www3.pj.nl/gym_info_leerlingen/subst_001.htm', loadschedule);
