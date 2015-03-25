@@ -24,6 +24,7 @@ function getHTML(URL, filterFunction) {
    	     	}
    	     	if (nextLink == null) {
    	     		schedulechanges.write('</table></center></body></html>', true);
+   	     		Ti.API.info(schedulechanges);
 	   	     	//When callback is finished filtering, create windows
 	   	     	createWindows();
 	   	     	//When windows are created, open.
