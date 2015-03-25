@@ -449,53 +449,28 @@ function createWindows (){
 		mainview.remove(webview1);
 		mainview.add(webview2);
 	});
-	imageview.addEventListener('click',function(){
-		label1.color = '#fff';
-		label1.backgroundColor = '#003c6d';
-		
-		label2.color = '#fff';
-		label2.backgroundColor = '#003c6d';
-		
-		imageview.backgroundColor = '#fff';
-		
-		mainview.remove(webview1);
-		mainview.remove(webview2);
-		actionbar.remove(refreshbutton);
-		
-		var stentorview = Titanium.UI.createView({
-	    	backgroundColor: '#fff',
-	    	height:'81%',
-	    	top:'10%'
+	imageview.addEventListener ('click', function (){
+		var dialog = Titanium.UI.createAlertDialog ({
+			title:'Stentor',
+			message:'Gevleugelde woorden insturen?',
+			ButtonNames:['ja','nee'],
+			cancel:1
 		});
 		
-		var gwbutton = Ti.UI.createButton({
-			title:'Gevleugelde Woorden insturen',
-			height:70,
-			width:170,
-			backgroundColor: '#dc006d',
-			color: '#fff'
-		});
-		
-		gwbutton.addEventListener('click',function(e){
-		   	var emailDialog = Ti.UI.createEmailDialog();
+		dialog.addEventListener ('click', function (e){
+			// diagnostic message
+			Titanium.API.info ('e = ' + JSON.stringify(e));
+			
+			if (e.cancel === e.index || e.cancel === true) {
+				return 1;
+			}
+			
+			var emailDialog = Ti.UI.createEmailDialog();
 			emailDialog.subject = "Gevleugelde Woorden via PJ Info";
 			emailDialog.toRecipients = ['mennohellinga@zoho.com'];	// CHANGE BEFORE RELEASE!
 			emailDialog.open();
+			return 0;
 		});
-		
-		label1.addEventListener('click',function(){
-			actionbar.add(refreshbutton);
-			mainview.remove(stentorview);
-			mainview.add(webview1);
-		});
-		label2.addEventListener('click',function(){
-			actionbar.add(refreshbutton);
-			mainview.remove(stentorview);
-			mainview.add(webview2);
-		});
-		
-		stentorview.add(gwbutton);
-		mainview.add(stentorview);
 	});
 }
 
