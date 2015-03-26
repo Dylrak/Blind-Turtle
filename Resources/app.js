@@ -1,122 +1,140 @@
-var schedulechanges = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,'schedulechanges.html');
-var template = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'schedulechangestemplate.html');
-var infoScreen;
-var scheduleHTML;
-var infoHTML;
-var error;
-var HTMLSource;
-var nextLink;
-var subst = 1;
-
-var win = Titanium.UI.createWindow({
-	backgroundColor: 'white',
-	exitOnClose: true
+var selectionwin = Titanium.UI.createWindow({
+	backgroundColor:'white',
+	height:'100%',
+	exitOnClose:true
 });
 
-function getHTML(URL, filterFunction) {
-	var infoLink = 'www3.pj.nl/infoschermgymnasium';
+var selectionactionbar = Titanium.UI.createView({
+	backgroundColor:'#dc006d',
+	top:0,
+	height:'10%'
+});
+
+var selectiontitlelabel = Titanium.UI.createLabel({
+	text:'School selecteren',
+	textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
+	color:'#fff',
+	font:{fontSize:24}
+});
+
+selectionactionbar.add(selectiontitlelabel);
 	
-	var client = Ti.Network.createHTTPClient({
-		onload: function(){
-			//when HTTP client is loaded, return HTML as text to callback
-			if (filterFunction){
-				var nextLink = filterFunction(this.responseText);
-   	     	}
-   	     	if (nextLink == null) {
-   	     		schedulechanges.write('</table></center></body></html>', true);
-   	     		Ti.API.info(schedulechanges.read());
-	   	     	//When callback is finished filtering, create windows
-	   	     	createWindows();
-	   	     	//When windows are created, open.
-	   	     	win.open();
-   	     	} else {
-   	     		client.open("GET", nextLink);
-   	     		client.send();
-   	     	}
-		},
-		onerror: function(e){
-			Ti.API.debug(e.error);
-			alert('Internetverbinding mislukt. Probeer het later opnieuw.');
-			error = true;
-		},
-		timeout : 5000
+var selectionsetschoolbutton = Titanium.UI.createButton({
+	title:'Kies je school...',
+	height:'10%',
+	width:'100%',
+	backgroundColor:'#fff',
+	color:'#003c6d'
+});
+
+var confirmbutton = Titanium.UI.createButton({
+	title:'Bevestigen',
+	height:'10%',
+	bottom:'10%'
+});
+
+var schools = ['!mpulse Kollum', 'Dalton Dokkum', 'De Dyk', 'De Foorakker', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium'];
+
+var selectedschool;
+
+selectionsetschoolbutton.addEventListener('click',function(){
+	var schooloptions = {
+	title:'School selecteren',
+	options:schools
+	};
+	var setschool = Ti.UI.createOptionDialog(schooloptions);
+	setschool.show();
+	setschool.addEventListener('click', onSelectOptionDialog);
+	function onSelectOptionDialog(event){
+	    var selectedIndex = event.source.selectedIndex;
+	    if(schools[selectedIndex] != null) {
+	    	selectionwin.remove(selectionsetschoolbutton);
+		    selectionsetschoolbutton.title = schools[selectedIndex];
+		    selectedschool = schools[selectedIndex];
+		    if(selectedschool == '!mpulse Kollum'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
+		    	});
+		    }else if(selectedschool == 'Dalton Dokkum'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/dok_info_leerlingen/','http://www3.pj.nl/infoschermdokkum');
+		    	});
+		    }else if(selectedschool == 'De Dyk'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/dyk_info_leerlingen/','http://www3.pj.nl/infoschermdedyk');
+		    	});
+		    }else if(selectedschool == 'De Foorakker'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/anna_info_leerlingen/','http://www3.pj.nl/infoschermfoorakker');
+		    	});
+		    }else if(selectedschool == 'Leeuwarder Lyceum'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/lyc_info_leerlingen/','http://www3.pj.nl/infoschermlyceum');
+		    	});
+		    }else if(selectedschool == 'Montessori High School'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/mon_info_leerlingen/','http://www3.pj.nl/infoschermmontessori');
+		    	});
+		    }else if(selectedschool == 'Stedelijk Gymnasium'){
+		    	confirmbutton.addEventListener('click',function(){
+		    		createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
+		    	});
+		    }
+		    selectionwin.add(selectionsetschoolbutton);
+	    }
+	}
+});
+
+Ti.Gesture.addEventListener('orientationchange', function(e){
+	if(e.source.isPortrait()) {
+		selectionactionbar.applyProperties({
+			height:'10%'
+		});
+	} else if(e.source.isLandscape()) {
+		selectionactionbar.applyProperties({
+			height:'15%'
+		});
+	};
+});
+
+var selectionscreenwidth = Ti.Platform.displayCaps.platformWidth;
+var selectionscreenheight = Ti.Platform.displayCaps.platformHeight;
+
+if(selectionscreenwidth > selectionscreenheight){
+	selectionactionbar.applyProperties({
+		height:'15%'
 	});
-	client.open("GET", URL);
-	client.send();
 }
 
-function loadschedule(scheduleHTML){
-	var tables = [];
-	var returnValue;
-	if (subst == 1){
-		var templateString = template.read();
-		schedulechanges.write(templateString);
-	}
-	subst = subst + 1;
-	var link = 'http://www3.pj.nl/gym_info_leerlingen/subst_00';
-	parseLink = link + subst + '.htm';
-	var regex = /Pagina (\d) \/ (\d)/;
-	var paginas = regex.exec(scheduleHTML);
-	if ((paginas !== null && paginas[0] <= paginas[1]) || subst == 1){
-		tables = (/<tr.*<\/tr>/mg.exec(scheduleHTML));
-		returnValue = parseLink;
-	} 
-	if (paginas == null || paginas[0] == paginas[1]){
-		returnValue = null;
-	}
-	tablesString = tables.join(" ");
-	schedulechanges.write(tablesString, true);
-	return returnValue;
-}
+selectionactionbar.add(selectiontitlelabel);
 
-function loadInfoscreen (sourcecode){
-	// EDIT THIS!
+selectionwin.add(selectionactionbar);
+selectionwin.add(selectionsetschoolbutton);
+selectionwin.add(confirmbutton);
+
+selectionwin.open();
+
+function createwindows(schedulechangesurl,infoscreenurl){
+	var win = Titanium.UI.createWindow({
+		backgroundColor:'white',
+		exitOnClose:true
+	});
 	
-	infoScreen = Titanium.Filesystem.getFile (Titanium.Filesystem.applicationDataDirectory, 'infoScreen.html');
-	
-	if(HTMLSource == null){
-		infoScreen.write ('<!DOCTYPE html><html><head></head><body><center><h1>Kon het mededelingenscherm niet laden</h1></center></body></html>');
-		return null;
-	}else{
-		var regColor = /ffba4/img;
-		var infoScreenWhite = HTMLSource.replace (regColor, "FFFFFF");
-		var regStartWhite = /<p class=MsoPlainText align=center style=\'text-align:center\'><span\nstyle=\'font-size:24.0pt;font-family:"Arial","sans-serif";color:red\'><o:p>&nbsp;<\/o:p><\/span><\/p>/img;
-		var infoScreenPrevSpaceGone = infoScreenWhite.replace (regStartWhite, ' ');
-		var regRedundancies = /<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img;
-		var infoScreenFinal = "foo".replace (regRedundancies, '</div>');
-		var infoScreenFinal = HTMLSource.replace (/<p class=MsoNormal align=center style=\'margin-bottom:10.0pt;mso-add-space:auto;\ntext-align:center;line-height:115%\'><b style=\'mso-bidi-font-weight:normal\'><span\nstyle=\'font-size:18.0pt;line-height:115%;font-family:\"Arial\",\"sans-serif\";\ncolor:#4F6228;mso-themecolor:accent3;mso-themeshade:128;mso-style-textfill-fill-color:\n#4F6228;mso-style-textfill-fill-themecolor:accent3;mso-style-textfill-fill-alpha:\n100.0%;mso-style-textfill-fill-colortransforms:lumm=50000\'>Einde bericht<o:p><\/o:p><\/span><\/b><\/p>.*<\/div>/img, '</div>');
-		infoScreen.write (infoScreenFinal);
-	}
-}
-
-function createWindows (){
 	var mainview = Titanium.UI.createView({
-		height:'81%',
-		top:'10%'
+		height:'81.5%'
 	});
 	
 	win.add(mainview);
 	
-	loadschedule();
-	loadInfoscreen ();
-	
 	var webview1 = Titanium.UI.createWebView({
-		url: schedulechanges.nativePath
+		url:schedulechangesurl
 	});
-	
-	var webview1EventListener = function(){
-		webview1.reload();
-	};
 		
 	mainview.add(webview1);
 	
 	var webview2 = Titanium.UI.createWebView({
-		url: infoScreen.nativePath
+		url:infoscreenurl
 	});
-	
-	var webview2EventListener = function(){
-		webview2.reload();
-	};
 	
 	var actionbar = Titanium.UI.createView({
 		backgroundColor:'#dc006d',
@@ -135,7 +153,7 @@ function createWindows (){
 	
 	var settingsbutton = Titanium.UI.createImageView({
 		image:'settings.png',
-		height:'80%',
+		height:'100%',
 		left:'3%'
 	});
 	
@@ -156,16 +174,16 @@ function createWindows (){
 		
 		var backbutton = Titanium.UI.createImageView({
 			image:'back.png',
-			height:'80%',
+			height:'100%',
 			left:'3%'
 		});
 		
 		backbutton.addEventListener('click',function(e){
-			settingswin.close();
 			backbutton.opacity='0.3';
 			setTimeout(function(){
 				backbutton.opacity='1.0';
 			}, 90);
+			settingswin.close();
 		});
 		
 		settingsactionbar.add(backbutton);
@@ -176,20 +194,21 @@ function createWindows (){
 			color:'#fff',
 			font:{fontSize:24}
 		});
-			
+		
 		var setschoolbutton = Titanium.UI.createButton({
-			title:'Kies je school...',
-			top:'35%',
-			height:60,
-			width:150,
-			borderWidth:2,
-			borderColor:'#003c6d',
+			title:'Verander je school...',
+			height:'10%',
+			width:'100%',
 			backgroundColor:'#fff',
 			color:'#003c6d'
 		});
 		
-		var schools = ['!mpulse', '!mpulse Kollum', 'Dalton Dokkum', 'De Brêge', 'De Dyk', 'De Foorakker',
-		'ISK', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium', 'YnSicht'];
+		var savebutton = Titanium.UI.createButton({
+			title:'Opslaan',
+			height:60,
+			width:150,
+			bottom:'10%',			backgroundColor:'#003c6d'
+		});
 		
 		setschoolbutton.addEventListener('click',function(){
 			var schooloptions = {
@@ -203,39 +222,38 @@ function createWindows (){
 			    var selectedIndex = event.source.selectedIndex;
 			    if (schools[selectedIndex] != null) {
 			    	settingswin.remove(setschoolbutton);
-				    setschoolbutton.title=schools[selectedIndex];
+				    setschoolbutton.title = schools[selectedIndex];
+				    selectedschool = schools[selectedIndex];
+				    if(selectedschool == '!mpulse Kollum'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
+				    	});
+				    }else if(selectedschool == 'Dalton Dokkum'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/dok_info_leerlingen/','http://www3.pj.nl/infoschermdokkum');
+				    	});
+				    }else if(selectedschool == 'De Dyk'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/dyk_info_leerlingen/','http://www3.pj.nl/infoschermdedyk');
+				    	});
+				    }else if(selectedschool == 'De Foorakker'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/anna_info_leerlingen/','http://www3.pj.nl/infoschermfoorakker');
+				    	});
+				    }else if(selectedschool == 'Leeuwarder Lyceum'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/lyc_info_leerlingen/','http://www3.pj.nl/infoschermlyceum');
+				    	});
+				    }else if(selectedschool == 'Montessori High School'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/mon_info_leerlingen/','http://www3.pj.nl/infoschermmontessori');
+				    	});
+				    }else if(selectedschool == 'Stedelijk Gymnasium'){
+				    	savebutton.addEventListener('click',function(){
+				    		createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
+				    	});
+				    }
 				    settingswin.add(setschoolbutton);
-			    }
-			}
-		});
-		
-		var years = ['Leerjaar 1', 'Leerjaar 2', 'Leerjaar 3', 'Leerjaar 4', 'Leerjaar 5', 'Leerjaar 6'];
-		
-		var setyearbutton = Titanium.UI.createButton({
-			title:'Kies je leerjaar...',
-			top:'65%',
-			height:60,
-			width:150,
-			borderWidth:2,
-			borderColor:'#003c6d',
-			backgroundColor:'#fff',
-			color:'#003c6d'
-		});
-		
-		setyearbutton.addEventListener('click',function(){
-			var yearoptions = {
-			title:'Leerjaar selecteren',
-			options:years
-			};
-			var setyear = Ti.UI.createOptionDialog(yearoptions);
-			setyear.show();
-			setyear.addEventListener('click', onSelectOptionDialog);
-			function onSelectOptionDialog(event){
-			    var selectedIndex = event.source.selectedIndex;
-			    if (years[selectedIndex] != null) {
-			    	settingswin.remove(setyearbutton);
-				    setyearbutton.title=years[selectedIndex];
-				    settingswin.add(setyearbutton);
 			    }
 			}
 		});
@@ -256,14 +274,14 @@ function createWindows (){
 		
 		settingswin.add(settingsactionbar);
 		settingswin.add(setschoolbutton);
-		settingswin.add(setyearbutton);
+		settingswin.add(savebutton);
 		settingswin.open();
 	});
 	actionbar.add(settingsbutton);
 	
 	var refreshbutton = Titanium.UI.createImageView({
 		image:'refresh.png',
-		height:'80%',
+		height:'100%',
 		right:'3%'
 	});
 	refreshbutton.addEventListener('click',function()	{
@@ -271,8 +289,6 @@ function createWindows (){
 		setTimeout(function(){
 			refreshbutton.opacity='1.0';
 		}, 90);
-		loadschedule();
-		loadInfoscreen();
 	});
 	
 	actionbar.add(refreshbutton);
@@ -293,7 +309,7 @@ function createWindows (){
 		top:'10%',
 		bottom:0,
 		left:0,
-		width:'43%',
+		width:'49%',
 		color:'#003c6d',
 		backgroundColor:'#fff'
 	});
@@ -303,13 +319,136 @@ function createWindows (){
 		textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
 		top:'10%',
 		bottom:0,
-		left:'44%',
-		width:'34%',
+		left:'51%',
+		width:'49%',
 		color:'#fff',
 		backgroundColor:'#003c6d'
 	});
 	
-	var imageview = Titanium.UI.createView({
+	var divisionborder = Ti.UI.createView({
+	    backgroundColor:'#dc006d',
+	    top:'10%',
+	    bottom:0,
+	    width:'2%',
+	    left:'49%',
+	    right:'49%'
+		});
+		
+		tabsview.add(divisionborder);
+		
+		tabsview.add(label1);
+		tabsview.add(label2);
+		
+		win.open();
+		
+		var screenwidth = Ti.Platform.displayCaps.platformWidth;
+		var screenheight = Ti.Platform.displayCaps.platformHeight;
+	 
+		if(screenwidth > screenheight){
+	    	mainview.applyProperties({
+				height:'72.5%',
+			top:'15%'
+		});
+		actionbar.applyProperties({
+			height:'15%'
+		});
+		tabsview.applyProperties({
+			height:'15%'
+		});
+		label1.applyProperties({
+			top:'15%'
+		});
+		label2.applyProperties({
+			top:'15%'
+		});
+		divisionborder.applyProperties({
+			top:'15%'
+		});
+		settingsbutton.addEventListener('click',function(e){
+			settingsactionbar.applyProperties({
+				height:'15%'
+			});
+		});
+	}
+	
+	Ti.Gesture.addEventListener('orientationchange', function(e){
+		if(e.source.isPortrait()) {
+			mainview.applyProperties({
+				height:'81.5%',
+				top:'10%'
+			});
+			actionbar.applyProperties({
+				height:'10%'
+			});
+			tabsview.applyProperties({
+				height:'10%'
+			});
+			label1.applyProperties({
+				top:'10%'
+			});
+			label2.applyProperties({
+				top:'10%'
+			});
+			divisionborder.applyProperties({
+				top:'10%'
+			});
+			settingsbutton.addEventListener('click',function(e){
+				settingsactionbar.applyProperties({
+					height:'10%'
+				});
+			});
+		} else if(e.source.isLandscape()) {
+			mainview.applyProperties({
+				height:'72.5%',
+				top:'15%'
+			});
+			actionbar.applyProperties({
+				height:'15%'
+			});
+			tabsview.applyProperties({
+				height:'15%'
+			});
+			label1.applyProperties({
+				top:'15%'
+			});
+			label2.applyProperties({
+				top:'15%'
+			});
+			divisionborder.applyProperties({
+				top:'15%'
+			});
+			settingsbutton.addEventListener('click',function(e){
+				settingsactionbar.applyProperties({
+					height:'15%'
+				});
+			});
+		};
+	});
+	
+	label1.addEventListener('click',function(){
+		label1.color = '#003c6d';
+		label1.backgroundColor = '#fff';
+		
+		label2.color = '#fff';
+		label2.backgroundColor = '#003c6d';
+		
+		mainview.remove(webview2);
+		mainview.add(webview1);
+	});
+	label2.addEventListener('click',function(){
+		label1.color = '#fff';
+		label1.backgroundColor = '#003c6d';
+		
+		label2.color = '#003c6d';
+		label2.backgroundColor = '#fff';
+		
+		mainview.remove(webview1);
+		mainview.add(webview2);
+	});
+}
+
+// STENTOR
+/* var imageview = Titanium.UI.createView({
 		top:'10%',
 		bottom:0,
 		left:'79%',
@@ -345,110 +484,8 @@ function createWindows (){
 	tabsview.add(divisionborder1);
 	tabsview.add(divisionborder2);
 	
-	tabsview.add(label1);
-	tabsview.add(label2);
 	tabsview.add(imageview);
 	
-	Ti.Gesture.addEventListener('orientationchange', function(e){
-		if(e.source.isPortrait()) {
-			mainview.applyProperties({
-				height:'81%',
-				top:'10%'
-			});
-			actionbar.applyProperties({
-				height:'10%'
-			});
-			tabsview.applyProperties({
-				height:'10%'
-			});
-			label1.applyProperties({
-				top:'10%'
-			});
-			label2.applyProperties({
-				top:'10%'
-			});
-			imageview.applyProperties({
-				height:'90%',
-				top:'10%'
-			});
-			divisionborder1.applyProperties({
-				top:'10%'
-			});
-			divisionborder2.applyProperties({
-				top:'10%'
-			});
-			settingsbutton.addEventListener('click',function(e){
-				settingsactionbar.applyProperties({
-					height:'10%'
-				});
-			});
-		} else if(e.source.isLandscape()) {
-			mainview.applyProperties({
-				height:'72.5%',
-				top:'15%'
-			});
-			actionbar.applyProperties({
-				height:'15%'
-			});
-			tabsview.applyProperties({
-				height:'15%'
-			});
-			label1.applyProperties({
-				top:'15%'
-			});
-			label2.applyProperties({
-				top:'15%'
-			});
-			imageview.applyProperties({
-				height:'85%',
-				top:'15%'
-			});
-			divisionborder1.applyProperties({
-				top:'15%'
-			});
-			divisionborder2.applyProperties({
-				top:'15%'
-			});
-			settingsbutton.addEventListener('click',function(e){
-				settingsactionbar.applyProperties({
-					height:'15%'
-				});
-			});
-		};
-	});
-	
-	label1.addEventListener('click',function(){
-		label1.color = '#003c6d';
-		label1.backgroundColor = '#fff';
-		
-		label2.color = '#fff';
-		label2.backgroundColor = '#003c6d';
-		
-		imageview.backgroundColor = '#003c6d';
-		
-		refreshbutton.removeEventListener('click',webview2EventListener);
-		
-		refreshbutton.addEventListener('click',webview1EventListener);
-		
-		mainview.remove(webview2);
-		mainview.add(webview1);
-	});
-	label2.addEventListener('click',function(){
-		label1.color = '#fff';
-		label1.backgroundColor = '#003c6d';
-		
-		label2.color = '#003c6d';
-		label2.backgroundColor = '#fff';
-		
-		imageview.backgroundColor = '#003c6d';
-		
-		refreshbutton.removeEventListener('click',webview1EventListener);
-		
-		refreshbutton.addEventListener('click',webview2EventListener);
-		
-		mainview.remove(webview1);
-		mainview.add(webview2);
-	});
 	imageview.addEventListener ('click', function (){
 		var dialog = Titanium.UI.createAlertDialog ({
 			title:'Stentor',
@@ -471,9 +508,5 @@ function createWindows (){
 			emailDialog.open();
 			return 0;
 		});
-	});
-}
-
-//MAIN:
-
-getHTML('http://www3.pj.nl/gym_info_leerlingen/subst_001.htm', loadschedule);
+	}); */
+	
