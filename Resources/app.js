@@ -168,9 +168,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			backgroundColor:'#fff'
 		});
 		settingsbutton.opacity='0.3';
-		setTimeout(function(){
-			settingsbutton.opacity='1.0';
-		}, 90);
+		setTimeout(settingsbutton.opacity='1.0', 100);
 		
 		var backbutton = Titanium.UI.createImageView({
 			image:'back.png',
@@ -180,9 +178,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		
 		backbutton.addEventListener('click',function(e){
 			backbutton.opacity='0.3';
-			setTimeout(function(){
-				backbutton.opacity='1.0';
-			}, 90);
+			setTimeout(backbutton.opacity='1.0',100);
 			settingswin.close();
 		});
 		
