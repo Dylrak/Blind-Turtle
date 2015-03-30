@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
-    <id>com.pjinfoclassic</id>
-    <name>PJ Info (Classic)</name>
+    <id>com.pjinfo</id>
+    <name>PJ Info</name>
     <version>1.0</version>
     <publisher>Blind Turtle</publisher>
     <url>http://</url>
@@ -39,10 +39,10 @@
         </plist>
     </ios>
     <android xmlns:android="http://schemas.android.com/apk/res/android">
-        <manifest>
-            <application android:theme="@style/Theme.NoActionBar"/>
-        </manifest>
-    </android>
+    	<manifest>
+        	<application android:theme="@style/Theme.NoActionBar"/>
+    	</manifest>
+	</android>
     <mobileweb>
         <precache/>
         <splash>
@@ -53,8 +53,8 @@
     </mobileweb>
     <modules/>
     <deployment-targets>
-        <target device="iphone">true</target>
-        <target device="ipad">true</target>
+        <target device="iphone">false</target>
+        <target device="ipad">false</target>
         <target device="android">true</target>
         <target device="blackberry">false</target>
         <target device="mobileweb">true</target>
