@@ -78,7 +78,7 @@ function selectschool(){
 		    if(schools[selectedIndex] != null){
 		    	selectionwin.remove(selectionsetschoolbutton);
 			    selectionsetschoolbutton.title = schools[selectedIndex];
-			    selectedschool = schools[selectedIndex];
+			    var selectedschool = schools[selectedIndex];
 			    if(selectedschool == '!mpulse Kollum'){
 			    	confirmbutton.addEventListener('click',function(){
 			    		createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
@@ -293,7 +293,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			    if (schools[selectedIndex] != null) {
 			    	settingswin.remove(setschoolbutton);
 				    setschoolbutton.title = schools[selectedIndex];
-				    selectedschool = schools[selectedIndex];
+				    var selectedschool = schools[selectedIndex];
 				    if(selectedschool == '!mpulse Kollum'){
 				    	savebutton.addEventListener('click',function(){
 				    		createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
@@ -411,25 +411,31 @@ function createwindows(schedulechangesurl,infoscreenurl){
 	    top:'10%',
 	    bottom:0,
 	    width:'2%',
-	    left:'49%',
-	    right:'49%'
-	});
-		
-	var imageview = Titanium.UI.createView({
-		top:'10%',
-		bottom:0,
-		left:'79%',
-		height:'90%',
-		width:'21%',
-		backgroundColor:'#003c6d'
+	    left:'49%'
 	});
 	
 	var selectedschool = Ti.App.Properties.getString('selectedschool');
 	if(selectedschool == 'Stedelijk Gymnasium'){
+		var divisionborder2 = Ti.UI.createView({
+		    backgroundColor:'#dc006d',
+		    top:'10%',
+		    bottom:0,
+		    width:'1%',
+		    left:'78%'
+		});
+		
+		var imageview = Titanium.UI.createView({
+			top:'10%',
+			bottom:0,
+			left:'79%',
+			height:'90%',
+			width:'21%',
+			backgroundColor:'#003c6d'
+		});
 		
 		imageview.addEventListener ('click', function (){
 			setTimeout(function(){
-		   		imageview.backgroundColor = '#dc006d';
+		   		imageview.backgroundColor = '#003c6d';
 			},100);
 			imageview.backgroundColor = '#fff';
 			var dialog = Titanium.UI.createAlertDialog ({
@@ -451,7 +457,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			});
 			dialog.show();
 		});
-		
+	
 		var image = Titanium.UI.createImageView({
 			image:'stentor.png'
 		});
@@ -459,27 +465,17 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		imageview.add(image);
 		
 		label1.applyProperties({
-			width:'39%'
+			width:'43%'
 		});
 		
 		label2.applyProperties({
-			width:'38%',
-			left:'40%'
+			width:'34%',
+			left:'44%'
 		});
 		
 		divisionborder1.applyProperties({
 			width:'1%',
-		    left:'39%',
-		    right:'60%'
-		});
-		
-		var divisionborder2 = Titanium.UI.createView({
-		    backgroundColor:'#dc006d',
-		    top:'10%',
-		    bottom:0,
-		    width:'1%',
-		    left:'78%',
-		    right:'21%'
+		    left:'43%'
 		});
 		
 		tabsview.add(divisionborder2);
@@ -517,12 +513,13 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		divisionborder1.applyProperties({
 			top:'15%'
 		});
-		if(osname == 'Stedelijk Gymnasium'){
+		if(selectedschool == 'Stedelijk Gymnasium'){
 			divisionborder2.applyProperties({
 				top:'15%'
 			});
 			imageview.applyProperties({
-				height:'85%'
+				height:'85%',
+				top:'15%'
 			});
 		}
 		settingsbutton.addEventListener('click',function(e){
@@ -556,12 +553,13 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			divisionborder1.applyProperties({
 				top:'10%'
 			});
-			if(osname == 'Stedelijk Gymnasium'){
+			if(selectedschool == 'Stedelijk Gymnasium'){
 				divisionborder2.applyProperties({
 					top:'10%'
 				});
 				imageview.applyProperties({
-					height:'90%'
+					height:'90%',
+					top:'10%'
 				});
 			}
 			settingsbutton.addEventListener('click',function(e){
@@ -592,12 +590,13 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			divisionborder1.applyProperties({
 				top:'15%'
 			});
-			if(osname == 'Stedelijk Gymnasium'){
+			if(selectedschool == 'Stedelijk Gymnasium'){
 				divisionborder2.applyProperties({
 					top:'15%'
 				});
 				imageview.applyProperties({
-					height:'85%'
+					height:'85%',
+					top:'15%'
 				});
 			}
 			settingsbutton.addEventListener('click',function(e){
