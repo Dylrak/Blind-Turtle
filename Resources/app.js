@@ -28,14 +28,11 @@ function selectschool(){
 		height:'10%'
 	});
 	
-	var selectiontitlelabel = Titanium.UI.createLabel({
-		text:'School selecteren',
-		textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
-		color:'#fff',
-		font:{fontSize:24}
+	var selectiontitleimage = Titanium.UI.createImageView({
+		image:'selectiontitle.png',
+		height:'80%',
+		top:'12%'
 	});
-	
-	selectionactionbar.add(selectiontitlelabel);
 	
 	var pjlogo = Titanium.UI.createImageView({
 		image:'pjlogo.png',
@@ -53,7 +50,7 @@ function selectschool(){
 		backgroundSelectedColor:'#d0d0d0',
 		color:'#003c6d'
 	});
-	
+			
 	var confirmbutton = Titanium.UI.createButton({
 		title:'Bevestigen',
 		height:60,
@@ -65,18 +62,19 @@ function selectschool(){
 	
 	var schools = ['!mpulse Kollum', 'Dalton Dokkum', 'De Dyk', 'De Foorakker', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium'];
 	
-	selectionsetschoolbutton.addEventListener('click',function(){
-		var schooloptions = {
+	var schooloptions = {
 		title:'School selecteren',
 		options:schools
-		};
-		var setschool = Titanium.UI.createOptionDialog(schooloptions);
+	};
+	
+	var setschool = Titanium.UI.createOptionDialog(schooloptions);
+	
+	selectionsetschoolbutton.addEventListener('click',function(){
 		setschool.show();
 		setschool.addEventListener('click', onSelectOptionDialog);
 		function onSelectOptionDialog(event){
 		    var selectedIndex = event.source.selectedIndex;
 		    if(schools[selectedIndex] != null){
-		    	selectionwin.remove(selectionsetschoolbutton);
 			    selectionsetschoolbutton.title = schools[selectedIndex];
 			    var selectedschool = schools[selectedIndex];
 			    if(selectedschool == '!mpulse Kollum'){
@@ -109,7 +107,6 @@ function selectschool(){
 			    	});
 			    }
 			    Ti.App.Properties.setString('selectedschool',schools[selectedIndex]);
-			    selectionwin.add(selectionsetschoolbutton);
 		    }
 		}
 	});
@@ -156,7 +153,7 @@ function selectschool(){
 		});
 	}
 	
-	selectionactionbar.add(selectiontitlelabel);
+	selectionactionbar.add(selectiontitleimage);
 	
 	selectionwin.add(selectionactionbar);
 	selectionwin.add(pjlogo);
@@ -177,13 +174,13 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		height:'82%'
 	});
 	
-	win.add(mainview);
-	
 	var webview1 = Titanium.UI.createWebView({
 		url:schedulechangesurl
 	});
-		
-	mainview.add(webview1);
+	
+	var webviewname;
+	
+	webviewname = 'Roosterwijzigingen';
 	
 	var webview2 = Titanium.UI.createWebView({
 		url:infoscreenurl
@@ -195,14 +192,11 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		height:'10%'
 	});
 	
-	var titlelabel = Titanium.UI.createLabel({
-		text:'PJ Info',
-		textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
-		color:'#fff',
-		font:{fontSize:24}
+	var pjinfotitleimage = Titanium.UI.createImageView({
+		image:'pjinfotitle.png',
+		height:'80%',
+		top:'12%'
 	});
-	
-	actionbar.add(titlelabel);
 	
 	var settingsbutton = Titanium.UI.createImageView({
 		image:'settings.png',
@@ -210,8 +204,6 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		left:'2%',
 		opacity:'1.0'
 	});
-	
-	actionbar.add(settingsbutton);
 	
 	var settingsactionbar = Titanium.UI.createView({
 		backgroundColor:'#dc006d',
@@ -236,6 +228,22 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		});
 	}
 	
+	var schoollabel = Titanium.UI.createLabel({
+		text:'School: ',
+		top:'35%',
+		color:'#000',
+		font:{fontSize:18}
+	});
+	
+	var selectedschool = Ti.App.Properties.getString('selectedschool');
+	
+	var schoolstatus = Titanium.UI.createLabel({
+		text:selectedschool,
+		top:'40%',
+		color:'#000',
+		font:{fontSize:18,fontWeight:'bold'}
+	});
+	
 	var setschoolbutton = Titanium.UI.createButton({
 		title:'Verander je school...',
 		top:'50%',
@@ -243,7 +251,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		width:'80%',
 		backgroundColor:'#b0b0b0',
 		backgroundSelectedColor:'#d0d0d0',
-		color:'#003c6d'
+		color:'#000'
 	});
 	
 	settingsbutton.addEventListener('click',function(){
@@ -256,11 +264,10 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			backgroundColor:'#fff'
 		});
 		
-		var titlelabel = Titanium.UI.createLabel({
-			text:'Instellingen',
-			textAlign:'Titanium.UI.TEXT_ALIGNMENT_CENTER',
-			color:'#fff',
-			font:{fontSize:24}
+		var settingstitleimage = Titanium.UI.createImageView({
+			image:'settingstitle.png',
+			height:'80%',
+			top:'12%'
 		});
 		
 		if(osname == 'iphone' || osname == 'ipad'){
@@ -269,7 +276,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			});
 			settingsactionbar.add(backbutton);
 		}
-		
+	
 		var savebutton = Titanium.UI.createButton({
 			title:'Opslaan',
 			height:60,
@@ -280,18 +287,19 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		
 		var schools = ['!mpulse Kollum', 'Dalton Dokkum', 'De Dyk', 'De Foorakker', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium'];
 		
-		setschoolbutton.addEventListener('click',function(){
-			var schooloptions = {
+		var schooloptions = {
 			title:'School selecteren',
 			options:schools
-			};
-			var setschool = Titanium.UI.createOptionDialog(schooloptions);
+		};
+		
+		var setschool = Titanium.UI.createOptionDialog(schooloptions);
+		
+		setschoolbutton.addEventListener('click',function(){
 			setschool.show();
 			setschool.addEventListener('click', onSelectOptionDialog);
 			function onSelectOptionDialog(event){
 			    var selectedIndex = event.source.selectedIndex;
-			    if (schools[selectedIndex] != null) {
-			    	settingswin.remove(setschoolbutton);
+			    if(schools[selectedIndex] != null) {
 				    setschoolbutton.title = schools[selectedIndex];
 				    var selectedschool = schools[selectedIndex];
 				    if(selectedschool == '!mpulse Kollum'){
@@ -324,7 +332,6 @@ function createwindows(schedulechangesurl,infoscreenurl){
 				    	});
 				    }
 				    Ti.App.Properties.setString('selectedschool',schools[selectedIndex]);
-				    settingswin.add(setschoolbutton);
 			    }
 			}
 		});
@@ -334,6 +341,12 @@ function createwindows(schedulechangesurl,infoscreenurl){
 				settingsactionbar.applyProperties({
 					height:'10%'
 				});
+				schoollabel.applyProperties({
+					top:'35%'
+				});
+				schoolstatus.applyProperties({
+					top:'40%'
+				});
 				setschoolbutton.applyProperties({
 					height:'10%'
 				});
@@ -341,20 +354,28 @@ function createwindows(schedulechangesurl,infoscreenurl){
 				settingsactionbar.applyProperties({
 					height:'15%'
 				});
+				schoollabel.applyProperties({
+					top:'30%'
+				});
+				schoolstatus.applyProperties({
+					top:'38%'
+				});
 				setschoolbutton.applyProperties({
 					height:'15%'
 				});
 			};
 		});
-	
-		settingsactionbar.add(titlelabel);
+		
+		settingsactionbar.add(settingstitleimage);
 		
 		settingswin.add(settingsactionbar);
+		settingswin.add(schoollabel);
+		settingswin.add(schoolstatus);
 		settingswin.add(setschoolbutton);
 		settingswin.add(savebutton);
+		
 		settingswin.open();
 	});
-	actionbar.add(settingsbutton);
 	
 	var refreshbutton = Titanium.UI.createImageView({
 		image:'refresh.png',
@@ -368,12 +389,17 @@ function createwindows(schedulechangesurl,infoscreenurl){
 			refreshbutton.opacity = '1.0';
 		},100);
 		refreshbutton.opacity = '0.3';
-		webview1.reload();
-		webview2.reload();
+		if(webviewname == 'Roosterwijzigingen'){
+			mainview.remove(webview1);
+			webview1.url = schedulechangesurl;
+			mainview.add(webview1);
+		};
+		if(webviewname == 'Mededelingen'){
+			mainview.remove(webview2);
+			webview2.url = infoscreenurl;
+			mainview.add(webview2);
+		};
 	});
-	
-	actionbar.add(refreshbutton);
-	win.add(actionbar);
 	
 	var tabsview = Titanium.UI.createView({
 		bottom:0,
@@ -381,8 +407,6 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		left:0,
 		right:0
 	});
-	
-	win.add(tabsview);
 	
 	var label1 = Titanium.UI.createLabel({
 		text:'Roosterwijzigingen',
@@ -461,7 +485,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		var image = Titanium.UI.createImageView({
 			image:'stentor.png'
 		});
-		
+			
 		imageview.add(image);
 		
 		label1.applyProperties({
@@ -483,10 +507,21 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		tabsview.add(imageview);
 	}
 	
-	tabsview.add(divisionborder1);
+	mainview.add(webview1);
 	
+	win.add(mainview);
+	
+	actionbar.add(pjinfotitleimage);
+	actionbar.add(settingsbutton);
+	actionbar.add(refreshbutton);
+	
+	win.add(actionbar);
+	
+	tabsview.add(divisionborder1);
 	tabsview.add(label1);
 	tabsview.add(label2);
+	
+	win.add(tabsview);
 	
 	win.open();
 	
@@ -525,6 +560,12 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		settingsbutton.addEventListener('click',function(e){
 			settingsactionbar.applyProperties({
 				height:'15%'
+			});
+			schoollabel.applyProperties({
+				top:'30%'
+			});
+			schoolstatus.applyProperties({
+				top:'38%'
 			});
 			setschoolbutton.applyProperties({
 				height:'15%'
@@ -566,6 +607,12 @@ function createwindows(schedulechangesurl,infoscreenurl){
 				settingsactionbar.applyProperties({
 					height:'10%'
 				});
+				schoollabel.applyProperties({
+					top:'35%'
+				});
+				schoolstatus.applyProperties({
+					top:'40%'
+				});
 				setschoolbutton.applyProperties({
 					height:'10%'
 				});
@@ -603,6 +650,12 @@ function createwindows(schedulechangesurl,infoscreenurl){
 				settingsactionbar.applyProperties({
 					height:'15%'
 				});
+				schoollabel.applyProperties({
+					top:'30%'
+				});
+				schoolstatus.applyProperties({
+					top:'38%'
+				});
 				setschoolbutton.applyProperties({
 					height:'15%'
 				});
@@ -619,6 +672,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		
 		mainview.remove(webview2);
 		mainview.add(webview1);
+		webviewname = 'Roosterwijzigingen';
 	});
 	label2.addEventListener('click',function(){
 		label1.color = '#fff';
@@ -629,6 +683,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		
 		mainview.remove(webview1);
 		mainview.add(webview2);
+		webviewname = 'Mededelingen';
 	});
 }
 	
