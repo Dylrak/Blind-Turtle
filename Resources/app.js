@@ -50,15 +50,6 @@ function selectschool(){
 		backgroundSelectedColor:'#d0d0d0',
 		color:'#003c6d'
 	});
-			
-	var confirmbutton = Titanium.UI.createButton({
-		title:'Bevestigen',
-		height:60,
-		width:150,
-		bottom:'10%',
-		backgroundColor:'#003c6d',
-		backgroundSelectedColor:'#98afc7'
-	});
 	
 	var schools = ['!mpulse Kollum', 'Dalton Dokkum', 'De Dyk', 'De Foorakker', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium'];
 	
@@ -73,42 +64,40 @@ function selectschool(){
 		setschool.show();
 		setschool.addEventListener('click', onSelectOptionDialog);
 		function onSelectOptionDialog(event){
-		    var selectedIndex = event.source.selectedIndex;
-		    if(schools[selectedIndex] != null){
-			    selectionsetschoolbutton.title = schools[selectedIndex];
-			    var selectedschool = schools[selectedIndex];
-			    if(selectedschool == '!mpulse Kollum'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
-			    	});
-			    }else if(selectedschool == 'Dalton Dokkum'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/dok_info_leerlingen/','http://www3.pj.nl/infoschermdokkum/');
-			    	});
-			    }else if(selectedschool == 'De Dyk'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/dyk_info_leerlingen/','http://www3.pj.nl/infoschermdedyk');
-			    	});
-			    }else if(selectedschool == 'De Foorakker'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/anna_info_leerlingen/','http://www3.pj.nl/infoschermfoorakker');
-			    	});
-			    }else if(selectedschool == 'Leeuwarder Lyceum'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/lyc_info_leerlingen/','http://www3.pj.nl/infoschermlyceum');
-			    	});
-			    }else if(selectedschool == 'Montessori High School'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/mon_info_leerlingen/','http://www3.pj.nl/infoschermmontessori');
-			    	});
-			    }else if(selectedschool == 'Stedelijk Gymnasium'){
-			    	confirmbutton.addEventListener('click',function(){
-			    		createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
-			    	});
-			    }
-			    Ti.App.Properties.setString('selectedschool',schools[selectedIndex]);
+		    selectedindex = event.source.selectedIndex;
+			selectedschool = schools[selectedindex];
+		    if(selectedschool != null){
+				selectionsetschoolbutton.title = selectedschool;
 		    }
 		}
+	});
+	
+	var confirmbutton = Titanium.UI.createButton({
+		title:'Bevestigen',
+		height:60,
+		width:150,
+		bottom:'10%',
+		backgroundColor:'#003c6d',
+		backgroundSelectedColor:'#98afc7'
+	});
+	
+	confirmbutton.addEventListener('click',function(){
+	    Ti.App.Properties.setString('selectedschool',schools[selectedindex]);
+	    if(selectedschool == '!mpulse Kollum'){
+	    	createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
+	    }else if(selectedschool == 'Dalton Dokkum'){
+	    	createwindows('http://www3.pj.nl/dok_info_leerlingen/','http://www3.pj.nl/infoschermdokkum');
+	    }else if(selectedschool == 'De Dyk'){
+	    	createwindows('http://www3.pj.nl/dyk_info_leerlingen/','http://www3.pj.nl/infoschermdedyk');
+	    }else if(selectedschool == 'De Foorakker'){
+	    	createwindows('http://www3.pj.nl/anna_info_leerlingen/','http://www3.pj.nl/infoschermfoorakker');
+	    }else if(selectedschool == 'Leeuwarder Lyceum'){
+	    	createwindows('http://www3.pj.nl/lyc_info_leerlingen/','http://www3.pj.nl/infoschermlyceum');
+	    }else if(selectedschool == 'Montessori High School'){
+	    	createwindows('http://www3.pj.nl/mon_info_leerlingen/','http://www3.pj.nl/infoschermmontessori');
+	    }else if(selectedschool == 'Stedelijk Gymnasium'){
+	    	createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
+	    }
 	});
 	
 	Ti.Gesture.addEventListener('orientationchange', function(e){
@@ -205,11 +194,28 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		opacity:'1.0'
 	});
 	
+	var settingswin = Titanium.UI.createWindow({
+		backgroundColor:'#fff'
+	});
+	
 	var settingsactionbar = Titanium.UI.createView({
 		backgroundColor:'#dc006d',
 		top:0,
 		height:'10%'
 	});
+	
+	var settingstitleimage = Titanium.UI.createImageView({
+		image:'settingstitle.png',
+		height:'80%',
+		top:'12%'
+	});
+	
+	if(osname == 'iphone' || osname == 'ipad'){
+		backbutton.addEventListener('click',function(){
+			settingswin.close();
+		});
+		settingsactionbar.add(backbutton);
+	}
 	
 	var osname = Titanium.Platform.osname;
 	
@@ -229,7 +235,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 	}
 	
 	var schoollabel = Titanium.UI.createLabel({
-		text:'School: ',
+		text:'Huidige school:',
 		top:'35%',
 		color:'#000',
 		font:{fontSize:18}
@@ -254,126 +260,98 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		color:'#000'
 	});
 	
+	var schools = ['!mpulse Kollum', 'Dalton Dokkum', 'De Dyk', 'De Foorakker', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium'];
+	
+	var schooloptions = {
+		title:'School selecteren',
+		options:schools
+	};
+	
+	var setschool = Titanium.UI.createOptionDialog(schooloptions);
+	
+	setschoolbutton.addEventListener('click',function(){
+		setschool.show();
+		setschool.addEventListener('click', onSelectOptionDialog);
+		function onSelectOptionDialog(event){
+		    selectedindex = event.source.selectedIndex;
+			selectedschool = schools[selectedindex];
+		    if(selectedschool != null){
+		    	setschoolbutton.title = selectedschool;
+		    }
+		}
+	});
+	
+	var savebutton = Titanium.UI.createButton({
+		title:'Opslaan',
+		height:60,
+		width:150,
+		bottom:'10%',
+		backgroundColor:'#003c6d',
+		backgroundSelectedColor:'#98afc7'
+	});
+	
+	savebutton.addEventListener('click',function(){
+	    Ti.App.Properties.setString('selectedschool',schools[selectedindex]);
+	    if(selectedschool == '!mpulse Kollum'){
+	    	createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
+	    }else if(selectedschool == 'Dalton Dokkum'){
+	    	createwindows('http://www3.pj.nl/dok_info_leerlingen/','http://www3.pj.nl/infoschermdokkum');
+	    }else if(selectedschool == 'De Dyk'){
+	    	createwindows('http://www3.pj.nl/dyk_info_leerlingen/','http://www3.pj.nl/infoschermdedyk');
+	    }else if(selectedschool == 'De Foorakker'){
+	    	createwindows('http://www3.pj.nl/anna_info_leerlingen/','http://www3.pj.nl/infoschermfoorakker');
+	    }else if(selectedschool == 'Leeuwarder Lyceum'){
+	    	createwindows('http://www3.pj.nl/lyc_info_leerlingen/','http://www3.pj.nl/infoschermlyceum');
+	    }else if(selectedschool == 'Montessori High School'){
+	    	createwindows('http://www3.pj.nl/mon_info_leerlingen/','http://www3.pj.nl/infoschermmontessori');
+	    }else if(selectedschool == 'Stedelijk Gymnasium'){
+	    	createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
+	    }
+	});
+	
+	Ti.Gesture.addEventListener('orientationchange', function(e){
+		if(e.source.isPortrait()) {
+			settingsactionbar.applyProperties({
+				height:'10%'
+			});
+			schoollabel.applyProperties({
+				top:'35%'
+			});
+			schoolstatus.applyProperties({
+				top:'40%'
+			});
+			setschoolbutton.applyProperties({
+				height:'10%'
+			});
+		} else if(e.source.isLandscape()) {
+			settingsactionbar.applyProperties({
+				height:'15%'
+			});
+			schoollabel.applyProperties({
+				top:'30%'
+			});
+			schoolstatus.applyProperties({
+				top:'38%'
+			});
+			setschoolbutton.applyProperties({
+				height:'15%'
+			});
+		};
+	});
+	
+	settingsactionbar.add(settingstitleimage);
+		
+	settingswin.add(settingsactionbar);
+	settingswin.add(schoollabel);
+	settingswin.add(schoolstatus);
+	settingswin.add(setschoolbutton);
+	settingswin.add(savebutton);
+	
 	settingsbutton.addEventListener('click',function(){
 		setTimeout(function(){
 			settingsbutton.opacity = '1.0';
 		},100);
 		settingsbutton.opacity = '0.3';
-		
-		var settingswin = Titanium.UI.createWindow({
-			backgroundColor:'#fff'
-		});
-		
-		var settingstitleimage = Titanium.UI.createImageView({
-			image:'settingstitle.png',
-			height:'80%',
-			top:'12%'
-		});
-		
-		if(osname == 'iphone' || osname == 'ipad'){
-			backbutton.addEventListener('click',function(){
-				settingswin.close();
-			});
-			settingsactionbar.add(backbutton);
-		}
-	
-		var savebutton = Titanium.UI.createButton({
-			title:'Opslaan',
-			height:60,
-			width:150,
-			bottom:'10%',			backgroundColor:'#003c6d',
-			backgroundSelectedColor:'#98afc7'
-		});
-		
-		var schools = ['!mpulse Kollum', 'Dalton Dokkum', 'De Dyk', 'De Foorakker', 'Leeuwarder Lyceum', 'Montessori High School', 'Stedelijk Gymnasium'];
-		
-		var schooloptions = {
-			title:'School selecteren',
-			options:schools
-		};
-		
-		var setschool = Titanium.UI.createOptionDialog(schooloptions);
-		
-		setschoolbutton.addEventListener('click',function(){
-			setschool.show();
-			setschool.addEventListener('click', onSelectOptionDialog);
-			function onSelectOptionDialog(event){
-			    var selectedIndex = event.source.selectedIndex;
-			    if(schools[selectedIndex] != null) {
-				    setschoolbutton.title = schools[selectedIndex];
-				    var selectedschool = schools[selectedIndex];
-				    if(selectedschool == '!mpulse Kollum'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
-				    	});
-				    }else if(selectedschool == 'Dalton Dokkum'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/dok_info_leerlingen/','http://www3.pj.nl/infoschermdokkum');
-				    	});
-				    }else if(selectedschool == 'De Dyk'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/dyk_info_leerlingen/','http://www3.pj.nl/infoschermdedyk');
-				    	});
-				    }else if(selectedschool == 'De Foorakker'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/anna_info_leerlingen/','http://www3.pj.nl/infoschermfoorakker');
-				    	});
-				    }else if(selectedschool == 'Leeuwarder Lyceum'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/lyc_info_leerlingen/','http://www3.pj.nl/infoschermlyceum');
-				    	});
-				    }else if(selectedschool == 'Montessori High School'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/mon_info_leerlingen/','http://www3.pj.nl/infoschermmontessori');
-				    	});
-				    }else if(selectedschool == 'Stedelijk Gymnasium'){
-				    	savebutton.addEventListener('click',function(){
-				    		createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
-				    	});
-				    }
-				    Ti.App.Properties.setString('selectedschool',schools[selectedIndex]);
-			    }
-			}
-		});
-		
-		Ti.Gesture.addEventListener('orientationchange', function(e){
-			if(e.source.isPortrait()) {
-				settingsactionbar.applyProperties({
-					height:'10%'
-				});
-				schoollabel.applyProperties({
-					top:'35%'
-				});
-				schoolstatus.applyProperties({
-					top:'40%'
-				});
-				setschoolbutton.applyProperties({
-					height:'10%'
-				});
-			} else if(e.source.isLandscape()) {
-				settingsactionbar.applyProperties({
-					height:'15%'
-				});
-				schoollabel.applyProperties({
-					top:'30%'
-				});
-				schoolstatus.applyProperties({
-					top:'38%'
-				});
-				setschoolbutton.applyProperties({
-					height:'15%'
-				});
-			};
-		});
-		
-		settingsactionbar.add(settingstitleimage);
-		
-		settingswin.add(settingsactionbar);
-		settingswin.add(schoollabel);
-		settingswin.add(schoolstatus);
-		settingswin.add(setschoolbutton);
-		settingswin.add(savebutton);
-		
 		settingswin.open();
 	});
 	
@@ -438,9 +416,8 @@ function createwindows(schedulechangesurl,infoscreenurl){
 	    left:'49%'
 	});
 	
-	var selectedschool = Ti.App.Properties.getString('selectedschool');
 	if(selectedschool == 'Stedelijk Gymnasium'){
-		var divisionborder2 = Ti.UI.createView({
+		divisionborder2 = Ti.UI.createView({
 		    backgroundColor:'#dc006d',
 		    top:'10%',
 		    bottom:0,
@@ -448,7 +425,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 		    left:'78%'
 		});
 		
-		var imageview = Titanium.UI.createView({
+		imageview = Titanium.UI.createView({
 			top:'10%',
 			bottom:0,
 			left:'79%',
@@ -475,7 +452,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 					}
 					var emailDialog = Titanium.UI.createEmailDialog();
 					emailDialog.subject = "Gevleugelde Woorden via PJ Info";
-					emailDialog.toRecipients = ['mennohellinga@zoho.com'];	// CHANGE BEFORE RELEASE!
+					emailDialog.toRecipients = ['stentor.redactie@gmail.com'];
 					emailDialog.open();
 					return 0;
 			});
