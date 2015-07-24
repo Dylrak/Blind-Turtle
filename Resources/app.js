@@ -40,7 +40,7 @@ function selectschool(){
 		height:150,
 		width:150
 	});
-
+	
 	var selectionsetschoolbutton = Titanium.UI.createButton({
 		title:'Kies je school...',
 		top:'50%',
@@ -60,25 +60,17 @@ function selectschool(){
 	
 	var setschool = Titanium.UI.createOptionDialog(schooloptions);
 	
-	var options = {
-		options:schools,
-	};
-	
-	var dialog;
-	
 	selectionsetschoolbutton.addEventListener('click',function(){
-	    dialog = Ti.UI.createOptionDialog(options);
-	    dialog.show();
-	    dialog.addEventListener('click',onSelectDialog);
-	});
-	
-	function onSelectDialog(event){
-	    selectedindex = dialog.getSelectedIndex();
-	    selectedschool = schools[selectedindex];
-		if(selectedschool != null){
-			selectionsetschoolbutton.title = selectedschool;
+		setschool.show();
+		setschool.addEventListener('click', onSelectOptionDialog);
+		function onSelectOptionDialog(event){
+		    selectedindex = event.source.selectedIndex;
+			selectedschool = schools[selectedindex];
+		    if(selectedschool != null){
+				selectionsetschoolbutton.title = selectedschool;
+		    }
 		}
-	}
+	});
 	
 	var confirmbutton = Titanium.UI.createButton({
 		title:'Bevestigen',
@@ -90,9 +82,7 @@ function selectschool(){
 	});
 	
 	confirmbutton.addEventListener('click',function(){
-		if(selectedschool){
-			Ti.App.Properties.setString('selectedschool',selectedschool);
-		};
+	    Ti.App.Properties.setString('selectedschool',schools[selectedindex]);
 	    if(selectedschool == '!mpulse Kollum'){
 	    	createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
 	    }else if(selectedschool == 'Dalton Dokkum'){
@@ -109,22 +99,6 @@ function selectschool(){
 	    	createwindows('http://www3.pj.nl/gym_info_leerlingen/','http://www3.pj.nl/infoschermgymnasium');
 	    }
 	});
-	
-	var screenwidth = Ti.Platform.displayCaps.platformWidth;
-	var screenheight = Ti.Platform.displayCaps.platformHeight;
- 
-	if(screenwidth > screenheight){
-    	selectionactionbar.applyProperties({
-			height:'15%'
-		});
-		selectionsetschoolbutton.applyProperties({
-			height:'15%'
-		});
-		pjlogo.applyProperties({
-			height:125,
-			width:125
-		});
-	}
 	
 	Ti.Gesture.addEventListener('orientationchange', function(e){
 		if(e.source.isPortrait()) {
@@ -151,6 +125,22 @@ function selectschool(){
 			});
 		};
 	});
+	
+	var selectionscreenwidth = Ti.Platform.displayCaps.platformWidth;
+	var selectionscreenheight = Ti.Platform.displayCaps.platformHeight;
+	
+	if(selectionscreenwidth > selectionscreenheight){
+		selectionactionbar.applyProperties({
+			height:'15%'
+		});
+		selectionsetschoolbutton.applyProperties({
+			height:'15%'
+		});
+		pjlogo.applyProperties({
+			height:100,
+			width:100
+		});
+	}
 	
 	selectionactionbar.add(selectiontitleimage);
 	
@@ -279,25 +269,17 @@ function createwindows(schedulechangesurl,infoscreenurl){
 	
 	var setschool = Titanium.UI.createOptionDialog(schooloptions);
 	
-	var options = {
-		options:schools,
-	};
-	
-	var dialog;
-	
 	setschoolbutton.addEventListener('click',function(){
-	    dialog = Ti.UI.createOptionDialog(options);
-	    dialog.show();
-	    dialog.addEventListener('click',onSelectDialog);
-	});
-	
-	function onSelectDialog(event){
-	    selectedindex = dialog.getSelectedIndex();
-	    selectedschool = schools[selectedindex];
-		if(selectedschool != null){
-			setschoolbutton.title = selectedschool;
+		setschool.show();
+		setschool.addEventListener('click', onSelectOptionDialog);
+		function onSelectOptionDialog(event){
+		    selectedindex = event.source.selectedIndex;
+			selectedschool = schools[selectedindex];
+		    if(selectedschool != null){
+		    	setschoolbutton.title = selectedschool;
+		    }
 		}
-	}
+	});
 	
 	var savebutton = Titanium.UI.createButton({
 		title:'Opslaan',
@@ -309,9 +291,7 @@ function createwindows(schedulechangesurl,infoscreenurl){
 	});
 	
 	savebutton.addEventListener('click',function(){
-	    if(selectedschool){
-			Ti.App.Properties.setString('selectedschool',selectedschool);
-		};
+	    Ti.App.Properties.setString('selectedschool',schools[selectedindex]);
 	    if(selectedschool == '!mpulse Kollum'){
 	    	createwindows('http://www3.pj.nl/kol_info_leerlingen/','http://www3.pj.nl/infoschermkollum');
 	    }else if(selectedschool == 'Dalton Dokkum'){
